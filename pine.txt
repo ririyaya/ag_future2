@@ -1,0 +1,86 @@
+//@version=4
+strategy("Envelope", overlay=true)
+len = input(28)
+percent = input(1.0)
+src = input(close)
+exponential = input(false)
+
+basis = exponential ? ema(src, len) : sma(src, len)
+k = percent/100.0
+upper = basis * (1 + k)
+lower = basis * (1 - k)
+
+
+if (crossover(close, lower))
+	strategy.entry("buy", strategy.long, comment="buy")
+if (crossunder(close, upper))
+	strategy.entry("sell", strategy.short, comment="sell")
+//plot(strategy.equity, title="equity", color=color.red, linewidth=2, style=plot.style_areabr)
+
+
+
+
+cc ? 										: aqua
+		ma_up ? 					
+				lime : 
+						ma_down ? red : aqua
+						
+						
+
+if ma_up
+	strategy.entry("buy", strategy.long, comment="buy")
+if ma_down
+	strategy.entry("sell", strategy.short, comment="sell")
+	
+	
+	
+//@version=4
+//Created by user ChrisMoody 4-24-2014
+//Plots The Majority of Moving Averages
+//Defaults to Current Chart Time Frame --- But Can Be Changed to Higher Or Lower Time Frames
+//2nd MA Capability with Show Crosses Feature
+study(title="CM_Ultimate_MA_MTF", shorttitle="CM_Ultimate_MA_MTF", overlay=true)
+//inputs
+src = close
+useCurrentRes = input(true, title="Use Current Chart Resolution?")
+resCustom = input(title="Use Different Timeframe? Uncheck Box Above", type=input.resolution, defval="D")
+len = input(20, title="Moving Average Length - LookBack Period")
+atype = input(1,minval=1,maxval=7,title="1=SMA, 2=EMA, 3=WMA, 4=HullMA, 5=VWMA, 6=RMA, 7=TEMA")
+cc = input(true,title="Change Color Based On Direction?")
+smoothe = input(2, minval=1, maxval=10, title="Color Smoothing - 1 = No Smoothing")
+doma2 = input(false, title="Optional 2nd Moving Average")
+len2 = input(50, title="Moving Average Length - Optional 2nd MA")
+atype2 = input(1,minval=1,maxval=7,title="1=SMA, 2=EMA, 3=WMA, 4=HullMA, 5=VWMA, 6=RMA, 7=TEMA")
+cc2 = input(true,title="Change Color Based On Direction 2nd MA?")
+warn = input(false, title="***You Can Turn On The Show Dots Parameter Below Without Plotting 2nd MA to See Crosses***")
+warn2 = input(false, title="***If Using Cross Feature W/O Plotting 2ndMA - Make Sure 2ndMA Parameters are Set Correctly***")
+sd = input(false, title="Show Dots on Cross of Both MA's")
+
+
+res = useCurrentRes ? timeframe.period : resCustom
+//hull ma definition
+hullma = wma(2*wma(src, len/2)-wma(src, len), round(sqrt(len)))
+//TEMA definition
+ema1 = ema(src, len)
+ema2 = ema(ema1, len)
+ema3 = ema(ema2, len)
+tema = 3 * (ema1 - ema2) + ema3
+
+avg = atype == 1 ? sma(src,len) : atype == 2 ? ema(src,len) : atype == 3 ? wma(src,len) : atype == 4 ? hullma : atype == 5 ? vwma(src, len) : atype == 6 ? rma(src,len) : tema
+
+out = avg 
+
+out1 = security('SILVER', res, out)
+
+ma_up = out1 >= out1[smoothe]
+ma_down = out1 < out1[smoothe]
+col = cc ? ma_up ? color.lime : ma_down ? color.red : color.aqua : color.aqua
+
+plot(out1, title="Multi-Timeframe Moving Avg", style=plot.style_line, linewidth=1, color = col)
+
+
+
+if cc==false or ((ma_down and ma_up)==false)
+	strategy.entry("buy", strategy.long, comment="buy")
+if ma_down and ma_up==false and cc==false
+	strategy.entry("sell", strategy.short, comment="sell")

@@ -1,0 +1,49 @@
+//@version=4
+//30min,超频 75%,1255%
+strategy("ma转向", overlay=true, default_qty_type = strategy.percent_of_equity, default_qty_value = 100)
+
+len = input(20, minval=1, title="Length")
+src = input(close, title="Source")
+offset = input(title="Offset", type=input.integer, defval=0, minval=-500, maxval=500)
+out = sma(src, len)
+
+//co=out-out[1]>0
+co=(out-out[1])/out*10000
+oc=out-out[1]<0
+//col=co and co[1] ? color.red : oc and oc[1] ? color.blue : color.yellow
+col=co>5 and co[1]>5 ? color.red : co<-5 and co[1]<-5 ? color.blue : color.yellow
+plot(out, color=col, title="MA", offset=offset)
+
+if co and co[1]
+	strategy.entry("buy", strategy.long,limit =out )
+    //strategy.order("buy", strategy.long,limit =out ) 
+//strategy.cancel('buy', when=oc)
+//strategy.close("buy", when = oc, comment = "close buy ")
+if oc and oc[1]
+	strategy.entry("sell", strategy.short,limit =out)
+	//strategy.order("sell", strategy.short, limit =out)
+//strategy.cancel('sell', when=co)
+//strategy.close("sell", when = co, comment = "close sell")
+
+
+
+
+
+//@version=4
+strategy("ma转向", overlay=true, default_qty_type = strategy.percent_of_equity, default_qty_value = 100)
+
+len = input(20, minval=1, title="Length")
+src = input(close, title="Source")
+offset = input(title="Offset", type=input.integer, defval=0, minval=-500, maxval=500)
+out = sma(src, len)
+
+co=(out-out[1])/out*100000
+oc=out-out[1]<0
+
+col=co>5 and co[1]>5 ? color.red : co<-5 and co[1]<-5 ? color.blue : color.yellow
+plot(out, color=col, title="MA", offset=offset)
+
+if co>5 and co[1]>5
+	strategy.entry("buy", strategy.long,limit =out )
+if co<-5 and co[1]<-5
+	strategy.entry("sell", strategy.short,limit =out)

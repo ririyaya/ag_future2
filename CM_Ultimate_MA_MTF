@@ -1,0 +1,38 @@
+//@version=4
+//Created by user ChrisMoody 4-24-2014
+//Plots The Majority of Moving Averages
+//Defaults to Current Chart Time Frame --- But Can Be Changed to Higher Or Lower Time Frames
+//2nd MA Capability with Show Crosses Feature
+strategy(title="CM_Ultimate_MA_MTF", shorttitle="CM_Ultimate_MA_MTF", overlay=true,default_qty_type = strategy.percent_of_equity, default_qty_value = 100)
+//inputs
+src = close
+
+len = input(20, title="Moving Average Length - LookBack Period")
+len1 = input(40, title="Moving Average Length - LookBack Period")
+cc = input(true,title="Change Color Based On Direction?")
+smoothe = input(2, minval=1, maxval=10, title="Color Smoothing - 1 = No Smoothing")
+
+
+res = timeframe.period
+//hull ma definition
+hullma = wma(2*wma(src, len/2)-wma(src, len), round(sqrt(len)))
+//TEMA definition
+ema1 = ema(src, len)
+ema2 = ema(ema1, len)
+ema3 = ema(ema2, len)
+tema = 3 * (ema1 - ema2) + ema3
+
+avg = sma(src,len)
+out = avg 
+out1 = security(tickerid, res, out)
+
+ma_up = out1 >= out1[smoothe]
+ma_down = out1 < out1[smoothe]
+col = ma_up ? color.red : ma_down ? color.aqua : color.lime
+
+plot(out1, title="Multi-Timeframe Moving Avg", style=plot.style_line, linewidth=1, color = col)
+
+if ma_up
+    strategy.entry("buy", strategy.long, comment="buy",limit=out1)
+if ma_down
+    strategy.entry("sell", strategy.short, comment="sell",limit=out1)
