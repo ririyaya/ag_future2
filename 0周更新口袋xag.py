@@ -48,7 +48,7 @@ for i in range(0,22):
     if tm <= 1534951140001:
         break
     rev = get(count, tm)
-    print(rev[0][-1][-1],lasttime)
+    #print(rev[0][-1][-1],lasttime)
     #rev[0].reverse()
     for i in range(len(rev[0])):
         #print(i, rev[0][i][2])
@@ -66,3 +66,4 @@ print(len(li))
 d.executemany(sq, li)
 d.execute(de_sq)
 mydb.commit()
+time.sleep(2)

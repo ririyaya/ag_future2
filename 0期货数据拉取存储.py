@@ -28,7 +28,7 @@ def get(count, tm):  #1m,5m,15m,30m,60m qid 6,agtd,13 xag,704 连续
     li = []
     for i in range(0, len(candle)):
         li.append(tuple(candle[i].values()))
-    print(len(li))
+    #print(len(li))
     ts = li[0][7]  # 倒叙最新
     return li, ts
 
@@ -68,6 +68,7 @@ print(len(li))
 d.executemany(sq,li)
 d.execute(del_sq)
 mydb.commit()
+time.sleep(2)
 '''
 print('new table name')
 t_name=str(input())

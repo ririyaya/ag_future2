@@ -32,3 +32,20 @@ strBody=strBody.replace("omvg-s1m3ShOkIz1C44OG383WIg",temp);
 // FiddlerObject.alert(strBody);
 // 将修改后的body，重新写回Request中
 oSession.utilSetRequestBody(strBody);
+
+
+A1:=SUM(AMOUNT,1)>100000000;
+A2:=SUM((C/REF(C,1)-1)*100,10)>30;
+A3:=DYNAINFO(17)<1.5;
+A4:=SUM(AMOUNT,20)/20;
+A5:=A4>1200000000;
+A6:=(C-REF(C,1))*100/REF(C,1)<11;
+A7:=CLOSE<90;
+ST:=IF(NAMELIKE('ST') OR NAMELIKE('*ST'),0,1);
+TP:=DYNAINFO(4)>0;
+KC:=IF(CODELIKE('688'),0,1);
+CY:=IF(CODELIKE('300'),0,1);
+XG:=ST AND TP AND KC AND CY;
+A1 AND A2 AND A3 AND A5 AND A6 AND A7 AND XG ;
+
+https://bbs.nga.cn/read.php?&tid=28986514
