@@ -76,13 +76,13 @@ def ot(bei, xie, late=20):  # 主策略
                 lates, sell, chicang ,maxh,minl= 0, 0, 0,0,10000
             bct = 1
             # 开多,low<19收+1开的ma,前1ma>=前2ma
-            if l[i] <= (round(ma20[i], 3) - round((c[i] - o[i]) / 20, 3)) and buy == 0  and (1<lateb <= late)and ma20[i]>=ma20[i-1]:
+            if l[i] <= (round(ma20[i], 3) - round((c[i] - o[i]) / 16, 3)) and buy == 0  and (1<lateb <= late)and ma20[i]>=ma20[i-1]:
                 if round(ma20[i], 3) > o[i]:#低于ma开盘开仓
                     bo = o[i]
                 elif lateb==1:
                     bo = c[i]
                 else:
-                    bo = round(ma20[i], 3) - round((c[i] - o[i]) / 20, 3)#19收+1开的ma价挂单开仓
+                    bo = round(ma20[i], 3) - round((c[i] - o[i]) / 16, 3)#19收+1开的ma价挂单开仓
                 tskc = ts[i]
                 print(e, '多开',bo,time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(ts[i])/1000)), tskc, lateb,si,sign)
                 ee.append([float(e), '', '多开', bo, ma20[i], o[i], c[i], h[i], l[i], time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(ts[i])/1000)), i, (lateb-1)])
@@ -108,13 +108,13 @@ def ot(bei, xie, late=20):  # 主策略
                 # input()
                 lateb,buy, chicang,maxh,minl= 0, 0, 0,0,10000
             sct = 1
-            if h[i] >= (round(ma20[i], 3) - round((c[i] - o[i]) / 20, 3)) and sell == 0 and (1<lates <= late) and ma20[i]<=ma20[i-1]:
+            if h[i] >= (round(ma20[i], 3) - round((c[i] - o[i]) / 16, 3)) and sell == 0 and (1<lates <= late) and ma20[i]<=ma20[i-1]:
                 if round(ma20[i], 3) < o[i]:
                     so = o[i]
                 elif lates==1:
                     so=c[i]
                 else:
-                    so = round(ma20[i], 3) - round((c[i] - o[i]) / 20, 3)
+                    so = round(ma20[i], 3) - round((c[i] - o[i]) / 16, 3)
                 tskc = ts[i]
                 print(e, '空开', so,time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(ts[i])/1000)),tskc, lates,si,sign)
                 ee.append([float(e),'', '空开', so, ma20[i], o[i], c[i], h[i], l[i], time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(int(ts[i])/1000)), i,(lates-1)])
@@ -180,4 +180,4 @@ ee, log = ot(100000, 5, 15)
 print(len(ee)/2, ee[-1])
 #writeee(ee)
 print(getrate(ee))
-input()
+
