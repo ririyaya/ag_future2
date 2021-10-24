@@ -24,7 +24,7 @@ for i in range(12,13):#ma
 
 
 
-x_ag=xagclass.Xag(3) #13,13  13-14;12-16
+x_ag=xagclass.Xag(1) #13,13  13-14;12-16
 for i in range(13,14):#ma
     for j in range(13,14):#late
         xag, xagfag,CIrate=x_ag.ot(100000, 5, 1,j, x_ag.o, x_ag.c, x_ag.h, x_ag.l, x_ag.ts, x_ag.c1, i)
