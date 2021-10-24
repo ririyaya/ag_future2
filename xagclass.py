@@ -150,9 +150,9 @@ class GetXag:
         return round(torat1 / len(rat), 4)
 
     def writeee(self, ee):
-        if os.path.exists(r"C:\Users\食蜂\Desktop\1.txt"):
-            os.remove(r"C:\Users\食蜂\Desktop\1.txt")
-        with open(r"C:\Users\食蜂\Desktop\1.txt", "a", encoding='utf-8') as f:
+        if os.path.exists(r"d:\1.txt"):
+            os.remove(r"d:\1.txt")
+        with open(r"d:\1.txt", "a", encoding='utf-8') as f:
             for i in range(0, len(ee)):
                 f.write(format(ee[i]))
                 f.write('\r')

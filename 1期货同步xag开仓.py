@@ -7,9 +7,9 @@ fag15,30,17,5
 xag   16,15,5
 '''
 
-if os.path.exists(r"C:\Users\食蜂\Desktop\2.txt"):
-    os.remove(r"C:\Users\食蜂\Desktop\2.txt")
-f = open(r"C:\Users\食蜂\Desktop\2.txt", "a", encoding='utf-8')
+if os.path.exists(r"d:\2.txt"):
+    os.remove(r"d:\2.txt")
+f = open(r"d:\2.txt", "a", encoding='utf-8')
 f_ag=xagclass.GetXag(1, 'ag30')
 for i in range(12,13):#ma
     for j in range(12,13):#late
@@ -24,7 +24,7 @@ for i in range(12,13):#ma
 
 
 
-x_ag=xagclass.Xag(3) #13,13  13-14;12-16
+x_ag=xagclass.Xag(1) #13,13  13-14;12-16
 for i in range(13,14):#ma
     for j in range(13,14):#late
         xag, xagfag,CIrate=x_ag.ot(100000, 5, 1,j, x_ag.o, x_ag.c, x_ag.h, x_ag.l, x_ag.ts, x_ag.c1, i)

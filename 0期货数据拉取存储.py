@@ -35,9 +35,9 @@ def get(count, tm):  #1m,5m,15m,30m,60m qid: 6 agtd, 13 xag, 704 连续
 re_sq='select t from (select count(ts)t,ts from ag30 group by ts)b where t>1'
 del_sq='delete from ag30 order by ts desc limit 1'
 get_sq = "select ts from ag30 order by ts desc limit 1"
-d.execute(get_sq)
-lasttime = int((d.fetchall())[0][0])
-#lasttime=1533566880000-1
+#d.execute(get_sq)
+#lasttime = int((d.fetchall())[0][0])
+lasttime=1533566880000-1
 
 sq = "insert into ag30 (a,c,t,v,h,l,o,ts) values(%s,%s,%s,%s,%s,%s,%s,%s)"
 count = 114

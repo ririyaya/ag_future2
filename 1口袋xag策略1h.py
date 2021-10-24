@@ -148,13 +148,13 @@ def writeee(ee,f):
         #f.write(format(ee[i]))
         f.write('\r')
 
-os.remove(r"C:\Users\食蜂\Desktop\1.txt")
-with open(r"C:\Users\食蜂\Desktop\1.txt", "a", encoding='utf-8') as f:
+os.remove(r"D:\1.txt")
+with open(r"D:\1.txt", "a", encoding='utf-8') as f:
     #ee, log = ot(100000, 5, 15)
     #writeee(ee,f)
     f.close()
 
-with open(r"C:\Users\食蜂\Desktop\1.txt", "a", encoding='utf-8') as fi:
+with open(r"D:\1.txt", "a", encoding='utf-8') as fi:
     '''
     for i in range(13,27):
         ma20 = talib.MA(np.array(c1), timeperiod=i)[19:]
@@ -168,9 +168,9 @@ fi.close()
 
 
 def writeee(ee):
-    if os.path.exists(r"C:\Users\食蜂\Desktop\1.txt"):
-        os.remove(r"C:\Users\食蜂\Desktop\1.txt")
-    with open(r"C:\Users\食蜂\Desktop\1.txt", "a", encoding='utf-8') as f:
+    if os.path.exists(r"D:\1.txt"):
+        os.remove(r"D:\1.txt")
+    with open(r"D:\1.txt", "a", encoding='utf-8') as f:
         for i in range(0, len(ee)):
             f.write(format(ee[i]))
             f.write('\r')
