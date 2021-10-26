@@ -31,7 +31,8 @@ for i in range(13,14):#ma
         tex = (i, j, 5,  len(xag) / 2, xag[-1][0], x_ag.getrate(xag),CIrate)
         print(tex)
         f.write(str(tex) + '\r')
-f_ag.writeee(xag)
+        print(xag[-1])
+#f_ag.writeee(xag)
 '''
 现货  时间  信号  状态
     

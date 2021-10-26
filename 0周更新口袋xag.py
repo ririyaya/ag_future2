@@ -44,8 +44,8 @@ li = []
 tm = int(time.time() * 1000)
 #tm=1591089300000
 try:
-    for i in range(0,666):
-        print(i)
+    for i in range(0,5):
+        print('i',i)
         # tm=1620111600000+i*1000*60*60*count
         if tm <= 1534951140001:
             break
@@ -59,7 +59,7 @@ try:
                 flag=1
                 break
         li, tm = rev[0] + li, rev[1]
-        time.sleep(5)
+        time.sleep(1)
         if flag==1:
             break
 
@@ -69,6 +69,7 @@ except:
     d.executemany(sq, li)
 
 print(len(li))
+d.executemany(sq, li)
 d.execute(de_sq)
 mydb.commit()
 time.sleep(2)
