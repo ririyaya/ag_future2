@@ -10,7 +10,7 @@ xag   16,15,5
 if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
-f_ag=xagclass.GetXag(3, 'ag30')
+f_ag=xagclass.GetXag(1, 'ag30')
 for i in range(12,13):#ma
     for j in range(15,16):#late
         for k in range(5,6,1):#xie
