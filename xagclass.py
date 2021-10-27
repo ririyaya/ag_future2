@@ -42,7 +42,7 @@ def writeee(ee):
 # 16均线 15延迟
 
 class GetXag:
-    def __init__(self,leve,table='ag15'): #杠杆倍率,表名
+    def __init__(self,ma_range,leve,table='ag15'): #杠杆倍率,表名
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -62,18 +62,19 @@ class GetXag:
             ts.append(a[i][3])
             o.append(round(a[i][4], 5))
 
-        self.c1=c1
         self.__leve=leve
-        self.c = c1[19:]
-        self.h = h[19:]
-        self.l = l[19:]
-        self.ts = ts[19:]
-        self.o = o[19:]
+        self.c = c1[ma_range-1:]
+        self.h = h[ma_range-1:]
+        self.l = l[ma_range-1:]
+        self.ts = ts[ma_range-1:]
+        self.o = o[ma_range-1:]
+        self.ma = get_MA(c1, ma_range)
+        print(len(self.c),len(self.ma))
 
     # main
-    def ot(self, bei, xie, late_start,late, o, c, h, l, ts, c1,ma_range):  # 主策略
+    def ot(self, bei, xie, late_start, late, ma_range):  # 主策略
         #ma = talib.MA(np.array(c1), timeperiod=ma_range)[19:]
-        ma= get_MA(c1,13)
+
         ee = []
         log = []
         chicang = 0
@@ -82,14 +83,14 @@ class GetXag:
         bct, sct, bo, bc, so, sc, buy, sell = 0, 0, 0, 0, 0, 0, 0, 0
         maxh, minl = 0, 10000
         CIrate ,tax= 1,0.0001
-        for i in range(0, len(c)):  # 5900,2019-12-30
+        for i in range(0, len(self.c)):  # 5900,2019-12-30
             si = sign
-            sign = round((ma[i] - ma[i - 1]) / ma[i - 1] * bei, 5)
+            sign = round((self.ma[i] - self.ma[i - 1]) / self.ma[i - 1] * bei, 5)
             # log.append([si,sign])
-            if h[i] > maxh and (sell == 1 or buy == 1):
-                maxh = h[i]
-            if l[i] < minl and (sell == 1 or buy == 1):
-                minl = l[i]
+            if self.h[i] > maxh and (sell == 1 or buy == 1):
+                maxh = self.h[i]
+            if self.l[i] < minl and (sell == 1 or buy == 1):
+                minl = self.l[i]
             # 前1角and前2角>xie,且空仓,或有过信号
             if (sign > xie and si > xie and buy == 0):# or (bct == 1):
                 lateb += 1
@@ -97,30 +98,30 @@ class GetXag:
                 sct = 0
                 bct = 1
                 if sell == 1:  # 平空
-                    sc = float(c[i])  # 正常损
+                    sc = float(self.c[i])  # 正常损
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#偏离值过4%损
                     # sc=float(o[i])
                     e = round(Dec(str(e)) + Dec(str(so)) - Dec(str(sc)), 5) * (chicang + 1)  # 平仓差额
                     CIrate+=round(CIrate * self.__leve * ((so-sc)/so - tax),4)
                     ee.append(
-                        [float(e), float(Dec(str(so)) - Dec(str(sc))), '空平', sc, ma[i], o[i], c[i], h[i], l[i],
-                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '', chicang,round((float(Dec(str(so)) - Dec(str(sc))))/so,4),CIrate])
+                        [float(e), float(Dec(str(so)) - Dec(str(sc))), '空平', sc, self.ma[i], self.o[i], self.c[i], self.h[i], self.l[i],
+                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.ts[i] / 1000)), i, '', chicang, round((float(Dec(str(so)) - Dec(str(sc)))) / so, 4), CIrate])
                     # print(e, '空平',sc,ts[i],si,sign)
                     # print(bo, bc, so, sc, si, sign)
                     lates, sell, chicang, maxh, minl = 0, 0, 0, 0, 10000
                 
                 # 开多,low<19收+1开的ma,前1ma>=前2ma
-                if  l[i] <= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))<=h[i] and buy == 0 and (late_start <= lateb <= late) :#and ma[i] >= ma[i - 1]
-                    if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))> o[i]:  # 低于ma开盘开仓
-                        bo = math.ceil(o[i])
+                if  self.l[i] <= (round(self.ma[i], 3) - round((self.c[i] - self.o[i]) / ma_range, 3))<= self.h[i] and buy == 0 and (late_start <= lateb <= late) :#and ma[i] >= ma[i - 1]
+                    if (round(self.ma[i], 3) - round((self.c[i] - self.o[i]) / ma_range, 3))> self.o[i]:  # 低于ma开盘开仓
+                        bo = math.ceil(self.o[i])
                     #elif lateb == 2:
-                        bo = math.ceil(o[i])
+                        bo = math.ceil(self.o[i])
                     else:
-                        bo = math.ceil(round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))  # 19收+1开的ma价挂单开仓
-                    tskc = ts[i]
+                        bo = math.ceil(round(self.ma[i], 3) - round((self.c[i] - self.o[i]) / ma_range, 3))  # 19收+1开的ma价挂单开仓
+                    tskc = self.ts[i]
                     # print(e, '多开',bo, tskc, lateb,si,sign)
-                    ee.append([float(e), '', '多开', bo, ma[i], o[i], c[i], h[i], l[i],
-                               time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, (lateb - 1)])
+                    ee.append([float(e), '', '多开', bo, self.ma[i], self.o[i], self.c[i], self.h[i], self.l[i],
+                               time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.ts[i] / 1000)), i, (lateb - 1),CIrate])
                     lateb, bct, buy = 0, 2, 1
                 '''if buy == 1 and chicang == 0:
                     if l[i] <= ma[i] * 0.99:
@@ -133,30 +134,30 @@ class GetXag:
                 bct = 0
                 sct = 1
                 if buy == 1:
-                    bc = float(c[i])
+                    bc = float(self.c[i])
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#
                     # bc=float(o[i])
                     e = round(Dec(str(e)) + Dec(str(bc)) - Dec(str(bo)), 5) * (chicang + 1)
                     CIrate += round(CIrate * self.__leve * ((bc - bo)/bo - tax),4)
                     ee.append(
-                        [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, ma[i], o[i], c[i], h[i], l[i],
-                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '',  chicang,round((float(Dec(str(bo)) - Dec(str(bc))))/so,4),CIrate])
+                        [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, self.ma[i], self.o[i], self.c[i], self.h[i], self.l[i],
+                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.ts[i] / 1000)), i, '', chicang, round((float(Dec(str(bo)) - Dec(str(bc)))) / so, 4), CIrate])
                     # print(e, '多平', bc,ts[i],si,sign)
                     # print(bo, bc, so, sc)
                     # input()
                     lateb, buy, chicang, maxh, minl = 0, 0, 0, 0, 10000
                 
-                if h[i] >= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))>=l[i] and  sell == 0 and (late_start <= lates <= late) :#and ma[i] <= ma[i - 1]:
-                    if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i]:
-                        so = math.floor(o[i])
+                if self.h[i] >= (round(self.ma[i], 3) - round((self.c[i] - self.o[i]) / ma_range, 3))>= self.l[i] and  sell == 0 and (late_start <= lates <= late) :#and ma[i] <= ma[i - 1]:
+                    if (round(self.ma[i], 3) - round((self.c[i] - self.o[i]) / ma_range, 3)) < self.o[i]:
+                        so = math.floor(self.o[i])
                     #elif lates == 2:
-                        so = math.floor(o[i])
+                        so = math.floor(self.o[i])
                     else:
-                        so = math.floor(round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))
-                    tskc = ts[i]
+                        so = math.floor(round(self.ma[i], 3) - round((self.c[i] - self.o[i]) / ma_range, 3))
+                    tskc = self.ts[i]
                     # print(e, '空开', so,tskc, lates,si,sign)
-                    ee.append([float(e), '', '空开', so, ma[i], o[i], c[i], h[i], l[i],
-                               time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, (lates - 1)])
+                    ee.append([float(e), '', '空开', so, self.ma[i], self.o[i], self.c[i], self.h[i], self.l[i],
+                               time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.ts[i] / 1000)), i, (lates - 1),CIrate])
                     # print(bo, bc, so, sc, o[i], c[i], h[i], l[i], round(ma[i], 2))
                     # input()
                     lates, sct, sell = 0, 2, 1

@@ -10,6 +10,8 @@ from decimal import Decimal
 from decimal import getcontext
 import traceback
 
+table_name='ag30'
+
 mydb = mysql.connector.connect(
 host="localhost",
     user="root",
@@ -20,7 +22,7 @@ d = mydb.cursor()
 
                  # type1, 2, 3,  4,  5:
 def get(count, tm):  #1m,5m,15m,30m,60m qid: 6 agtd, 13 xag, 704 连续
-    url = "https://official.gkoudai.com/officialNetworkApi/CandleStickV2?qid=704&type=3&count=" + str(count) + "&ts=" + str(tm)
+    url = "https://official.gkoudai.com/officialNetworkApi/CandleStickV2?qid=704&type=4&count=" + str(count) + "&ts=" + str(tm)
     header = {'epid': 'a6c89023-9472-4f30-81cf-8c7dea62aae5'}
     r = requests.post(url, headers=header)
     candle = json.loads(r.text)['data']['candle']
@@ -31,7 +33,7 @@ def get(count, tm):  #1m,5m,15m,30m,60m qid: 6 agtd, 13 xag, 704 连续
     ts = li[0][7]  # 倒叙最新
     return li, ts
 
-table_name='ag15'
+
 re_sq='select t from (select count(ts)t,ts from '+table_name+' group by ts)b where t>1'
 del_sq='delete from '+table_name+' order by ts desc limit 1'
 get_sq = 'select ts from '+table_name+' order by ts desc limit 1'
@@ -60,7 +62,7 @@ for i in range(0,666):
             flag=1
             break
     li, tm = rev[0] + li, rev[1]
-    time.sleep(0.50)
+    time.sleep(1)
     if flag==1:
         break
 
