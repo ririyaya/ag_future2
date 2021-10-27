@@ -19,7 +19,7 @@ mydb = mysql.connector.connect(
     auth_plugin='mysql_native_password')  # 'caching_sha2_password')
 d = mydb.cursor()
 
-table_name='ag30'
+table_name='ag15'
 
 mydb = mysql.connector.connect(
 host="localhost",

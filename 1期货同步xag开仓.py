@@ -10,22 +10,22 @@ xag   16,15,5
 if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
-f_ag=xagclass.GetXag(1, 'ag30')
-for i in range(12,13):#ma
+f_ag=xagclass.GetXag(1, 'ag15')
+for i in range(19,19):#ma
     for j in range(15,16):#late
         for k in range(5,6,1):#xie
             for l in range(2,3):#startlate
                 fag, log=f_ag.ot(100000, k, 2,j, f_ag.o, f_ag.c, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1, i)
                 tex=(i, l,j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag))
-                xagclass.writeee(fag)
+                #xagclass.writeee(fag)
                 print(tex)
                 print(fag[-1])
                 print(log[-1])
-                f.write(str(tex)+'\r')
+                #f.write(str(tex)+'\r')
 
-macag=xagclass.mac_ag(12,1,'ag30')
-maag,log=macag.ot( 100000, 5, 2, 15, 12)
-print(maag[-1],len(maag))
+#macag=xagclass.mac_ag(12,1,'ag30')
+#maag,log=macag.ot( 100000, 5, 2, 15, 12)
+
 
 '''
 x_ag=xagclass.Xag(1) #13,13  13-14;12-16

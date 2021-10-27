@@ -142,7 +142,7 @@ class GetXag:
                     CIrate += round(CIrate * self.__leve * ((bc - bo)/bo - tax),4)
                     ee.append(
                         [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, ma[i], o[i], c[i], h[i], l[i],
-                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '',  chicang,round((float(Dec(str(bo)) - Dec(str(bc))))/so,4),CIrate])
+                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '',  chicang,round((float(Dec(str(bo)) - Dec(str(bc))))/bo,4),CIrate])
                     # print(e, '多平', bc,ts[i],si,sign)
                     # print(bo, bc, so, sc)
                     # input()
