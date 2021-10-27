@@ -105,7 +105,7 @@ class GetXag:
 
                     ee.append(
                         [float(e), float(Dec(str(so)) - Dec(str(sc))), '空平', sc, ma[i], o[i], c[i], h[i], l[i],
-                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '', chicang,round((float(Dec(str(so)) - Dec(str(sc))))/so,4),CIrate])
+                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '', chicang,round((float(Dec(str(so)) - Dec(str(sc))))/so,4),CIrate,minl,maxh])
                     # print(e, '空平',sc,ts[i],si,sign)
                     # print(bo, bc, so, sc, si, sign)
                     lates, sell, chicang, maxh, minl = 0, 0, 0, 0, 10000
@@ -121,7 +121,7 @@ class GetXag:
                     tskc = ts[i]
                     # print(e, '多开',bo, tskc, lateb,si,sign)
                     ee.append([float(e), '', '多开', bo, ma[i], o[i], c[i], h[i], l[i],
-                               time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, (lateb - 1)])
+                               time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, lateb ])
                     lateb, bct, buy = 0, 2, 1
                 '''if buy == 1 and chicang == 0:
                     if l[i] <= ma[i] * 0.99:
@@ -142,7 +142,7 @@ class GetXag:
                     CIrate += round(CIrate * self.__leve * ((bc - bo)/bo - tax),4)
                     ee.append(
                         [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, ma[i], o[i], c[i], h[i], l[i],
-                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '',  chicang,round((float(Dec(str(bo)) - Dec(str(bc))))/bo,4),CIrate])
+                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '',  chicang,round((float(Dec(str(bc)) - Dec(str(bo))))/bo,4),CIrate,minl,maxh])
                     # print(e, '多平', bc,ts[i],si,sign)
                     # print(bo, bc, so, sc)
                     # input()
@@ -158,7 +158,7 @@ class GetXag:
                     tskc = ts[i]
                     # print(e, '空开', so,tskc, lates,si,sign)
                     ee.append([float(e), '', '空开', so, ma[i], o[i], c[i], h[i], l[i],
-                               time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, (lates - 1)])
+                               time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, lates])
                     # print(bo, bc, so, sc, o[i], c[i], h[i], l[i], round(ma[i], 2))
                     # input()
                     lates, sct, sell = 0, 2, 1
