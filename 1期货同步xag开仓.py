@@ -11,13 +11,13 @@ if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 
-for i in range(10,19):#ma
-    f_ag = xagclass.GetXag(i, 1, 'ag30')
+for i in range(12,13):#ma
+    f_ag = xagclass.GetXag(i, 3, 'ag30')
     for j in range(15,16):#late
         for k in range(5,6,1):#xie
             for l in range(2,3):#startlate
                 fag, log=f_ag.ot(100000, k, 2,j, i)
-                tex=(i, l,j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag),fag[-1][-1])
+                tex=(i, l,j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag),round(fag[-1][-1],3))
                 #xagclass.writeee(fag)
                 print(tex)
                 #print(fag[-1])

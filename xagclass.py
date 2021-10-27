@@ -69,7 +69,7 @@ class GetXag:
         self.ts = ts[ma_range-1:]
         self.o = o[ma_range-1:]
         self.ma = get_MA(c1, ma_range)
-        print(len(self.c),len(self.ma))
+        #print(len(self.c),len(self.ma))
 
     # main
     def ot(self, bei, xie, late_start, late, ma_range):  # 主策略
@@ -141,7 +141,7 @@ class GetXag:
                     CIrate += round(CIrate * self.__leve * ((bc - bo)/bo - tax),4)
                     ee.append(
                         [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, self.ma[i], self.o[i], self.c[i], self.h[i], self.l[i],
-                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.ts[i] / 1000)), i, '', chicang, round((float(Dec(str(bo)) - Dec(str(bc)))) / so, 4), CIrate])
+                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.ts[i] / 1000)), i, '', chicang, round((float(Dec(str(bo)) - Dec(str(bc)))) / bo, 4), CIrate])
                     # print(e, '多平', bc,ts[i],si,sign)
                     # print(bo, bc, so, sc)
                     # input()
@@ -168,7 +168,7 @@ class GetXag:
                         chicang += 1'''
         return ee, log
 
-
+"""
 class Xag():
     def __init__(self,leve,table='xag1h'): #杠杆倍率,表名
         mydb = mysql.connector.connect(
@@ -295,3 +295,5 @@ class Xag():
             return True
         else:
             return False
+
+"""
