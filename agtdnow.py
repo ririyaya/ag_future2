@@ -7,8 +7,7 @@ import mysql.connector
 import math
 import numpy as np
 import talib
-from decimal import Decimal
-from decimal import getcontext
+
 
 
 def get(tm,count='25'):#type1,2,3,4,5:1m,5m,15m,30m,60m qid 6,agtd,13 xag
