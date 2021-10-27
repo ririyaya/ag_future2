@@ -85,17 +85,19 @@ class GetXag:
             if l[i] < minl and (sell == 1 or buy == 1):
                 minl = l[i]
             # 前1角and前2角>xie,且空仓,或有过信号
-            if (sign > xie and si > xie and buy == 0):# or (bct == 1):
+            if (sign > xie and si > xie and buy == 0) :#or (bct == 1):
                 lateb += 1
                 lates = 0
                 sct = 0
                 bct = 1
+                log.append([lateb, sign, si])
                 if sell == 1:  # 平空
                     sc = float(c[i])  # 正常损
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#偏离值过4%损
                     # sc=float(o[i])
                     e = round(Dec(str(e)) + Dec(str(so)) - Dec(str(sc)), 5) * (chicang + 1)  # 平仓差额
                     CIrate+=round(CIrate * self.__leve * ((so-sc)/so - tax),4)
+
                     ee.append(
                         [float(e), float(Dec(str(so)) - Dec(str(sc))), '空平', sc, ma[i], o[i], c[i], h[i], l[i],
                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '', chicang,round((float(Dec(str(so)) - Dec(str(sc))))/so,4),CIrate])
@@ -121,11 +123,12 @@ class GetXag:
                         bo = (bo + ma[i] * 0.99) / 2
                         print(e, '多追', tskc, lateb)
                         chicang += 1'''
-            if (sign < -xie and si < -xie and sell == 0) :#or sct == 1:
+            if (sign < -xie and si < -xie and sell == 0):# or sct == 1:
                 lates += 1
                 lateb = 0
                 bct = 0
                 sct = 1
+                log.append([lates, sign, si])
                 if buy == 1:
                     bc = float(c[i])
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#

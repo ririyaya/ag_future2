@@ -20,6 +20,7 @@ for i in range(12,13):#ma
                 xagclass.writeee(fag)
                 print(tex)
                 print(fag[-1])
+                print(log[-1])
                 f.write(str(tex)+'\r')
 
 
