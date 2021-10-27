@@ -19,7 +19,7 @@ mydb = mysql.connector.connect(
     auth_plugin='mysql_native_password')  # 'caching_sha2_password')
 d = mydb.cursor()
 
-table_name='ag15'
+table_name='ag30'
 
 mydb = mysql.connector.connect(
 host="localhost",
@@ -48,9 +48,12 @@ def get(count, tm,table_name):  #1m,5m,15m,30m,60m qid: 6 agtd, 13 xag, 704 è¿žç
 re_sq='select t from (select count(ts)t,ts from '+table_name+' group by ts)b where t>1'
 del_sq='delete from '+table_name+' order by ts desc limit 1'
 get_sq = 'select ts from '+table_name+' order by ts desc limit 1'
+
+lasttime=1533566880000-1
+
 d.execute(get_sq)
 lasttime = int((d.fetchall())[0][0])
-#lasttime=1533566880000-1
+
 
 sq = 'insert into '+table_name+' (a,c,t,v,h,l,o,ts) values(%s,%s,%s,%s,%s,%s,%s,%s)'
 count = 114
