@@ -10,7 +10,7 @@ import talib
 
 
 
-def get(tm,count='25'):#type1,2,3,4,5:1m,5m,15m,30m,60m qid 6,agtd,13 xag
+def get(tm,count=25):#type1,2,3,4,5:1m,5m,15m,30m,60m qid 6,agtd,13 xag
  url = "https://official.gkoudai.com/officialNetworkApi/CandleStickV2?qid=704&type=4&count="+str(count)+"&ts="+str(tm)
  header = {'epid': 'a6c89023-9472-4f30-81cf-8c7dea62aae5'}
  r=requests.post(url,headers=header)
@@ -40,4 +40,3 @@ while True:
  print(rate)
  time.sleep(60)
 
-input()

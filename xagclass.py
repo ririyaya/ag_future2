@@ -9,10 +9,15 @@ from decimal import getcontext
 import mysql.connector
 import numpy as np
 import requests
-import talib
+#import talib
 
+def get_MA(listc,timeperiod=13):
+    ma=[]
+    for i in range(timeperiod,len(listc)+1):
+        ma.append(sum(listc[i-timeperiod:i])/timeperiod)
+    return ma
 
-def getrate( ee):
+def getrate(ee):
     rat = []
     i = 1
     while i < len(ee):
@@ -25,7 +30,7 @@ def getrate( ee):
             torat1 += 1
     return round(torat1 / len(rat), 4)
 
-def writeee( ee):
+def writeee(ee):
     if os.path.exists(r"d:\1.txt"):
         os.remove(r"d:\1.txt")
     with open(r"d:\1.txt", "a", encoding='utf-8') as f:
@@ -43,7 +48,7 @@ class GetXag:
             user="root",
             passwd="111",
             database='koudai',  # 数据库
-            auth_plugin='mysql_native_password')  # 'caching_sha2_password')  #
+            auth_plugin='mysql_native_password',unix_socket='/private/tmp/mysql.sock')   # 'caching_sha2_password')  #
         d = mydb.cursor()
 
         sq = 'select c,h,l,ts,o from '+table  # where ts>1609893464000'
@@ -67,7 +72,8 @@ class GetXag:
 
     # main
     def ot(self, bei, xie, late_start,late, o, c, h, l, ts, c1,ma_range):  # 主策略
-        ma = talib.MA(np.array(c1), timeperiod=ma_range)[19:]
+        #ma = talib.MA(np.array(c1), timeperiod=ma_range)[19:]
+        ma= get_MA(c1,13)
         ee = []
         log = []
         chicang = 0
