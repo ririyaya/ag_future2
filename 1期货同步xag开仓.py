@@ -23,8 +23,9 @@ for i in range(12,13):#ma
                 print(log[-1])
                 f.write(str(tex)+'\r')
 
-
-
+macag=xagclass.mac_ag(12,1,'ag30')
+maag,log=macag.ot( 100000, 5, 2, 15, 12)
+print(maag[-1],len(maag))
 
 '''
 x_ag=xagclass.Xag(1) #13,13  13-14;12-16
