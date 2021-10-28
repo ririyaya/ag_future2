@@ -9,7 +9,7 @@ from decimal import getcontext
 import mysql.connector
 import numpy as np
 import requests
-#import talib
+import talib
 
 def get_MA(listc,timeperiod=13):
     ma=[]

@@ -37,6 +37,6 @@ while True:
  #print(li)
  for i in range(int(count)-ma):
   rate.append(round((sum(li[i:i+ma])-sum(li[i+1:i+1+ma]))/sum(li[i+1:i+1+ma])*100000,3))
- print(rate)
+ print(candle[-1]['c'],rate)
  time.sleep(60)
 
