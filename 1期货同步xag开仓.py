@@ -20,7 +20,7 @@ for i in range(12,13):#ma
                 tex=(i, l,j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag),round(fag[-1][-1],3))
                 #xagclass.writeee(fag)
                 print(tex)
-                #print(fag[-1])
+                print(fag[-1])
                 #f.write(str(tex)+'\r')
 
 

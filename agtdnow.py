@@ -3,9 +3,9 @@ import os
 import re
 import json
 import time
-import mysql.connector
+#import mysql.connector
 import math
-import numpy as np
+#import numpy as np
 #import talib
 
 
