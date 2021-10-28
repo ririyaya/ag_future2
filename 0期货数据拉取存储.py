@@ -10,7 +10,7 @@ from decimal import Decimal
 from decimal import getcontext
 import traceback
 
-table_name='ag15'
+table_name='ag30'
 
 mydb = mysql.connector.connect(
 host="localhost",

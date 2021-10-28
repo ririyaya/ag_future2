@@ -6,7 +6,7 @@ import time
 import mysql.connector
 import math
 import numpy as np
-import talib
+#import talib
 
 
 
