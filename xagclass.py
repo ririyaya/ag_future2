@@ -51,32 +51,30 @@ class GetXag:
             auth_plugin='mysql_native_password')  # 'caching_sha2_password')  #
         d = mydb.cursor()
 
-        sq = 'select c,h,l,ts,o from '+table +' order by ts'#+' where ts>1635228900000'
+        sq = 'select c,h,l,ts,o from '+table +' order by ts'#+' where ts>1635346800000'
         d.execute(sq)
         a = d.fetchall()
-        c1, h, l, ts, o = [], [], [], [], []
+        self.c1, self.h, self.l, self.ts, self.o = [], [], [], [], []
         for i in range(0, len(a)):
-            c1.append(round(a[i][0], 5))
-            h.append(round(a[i][1], 5))
-            l.append(round(a[i][2], 5))
-            ts.append(a[i][3])
-            o.append(round(a[i][4], 5))
+            self.c1.append(round(a[i][0], 5))
+            self.h.append(round(a[i][1], 5))
+            self.l.append(round(a[i][2], 5))
+            self.ts.append(a[i][3])
+            self.o.append(round(a[i][4], 5))
 
-        self.c1=c1
         self.__leve=leve
-        self.c = c1[19:]
-        self.h = h[19:]
-        self.l = l[19:]
-        self.ts = ts[19:]
-        self.o = o[19:]
+
 
     # main
-    def ot(self, bei, xie, late_start,late, o, c, h, l, ts, c1,ma_range):  # 主策略
-        ma = talib.MA(np.array(c1), timeperiod=ma_range)[19:]
-        ee = []
-        log = []
-        chicang = 0
-        lateb, lates = 0, 0
+    def ot(self, bei, xie, late_start,late, o, h, l, ts, c1,ma_range):  # 主策略
+        c = c1[ma_range - 1:]
+        h = h[ma_range - 1:]
+        l = l[ma_range - 1:]
+        ts = ts[ma_range - 1:]
+        o = o[ma_range - 1:]
+        ma = talib.MA(np.array(c1), timeperiod=ma_range)[ma_range-1:]
+        ee,log = [],[]
+        lateb, lates,chicang = 0, 0, 0
         si, sign, e = 0, 0, 0
         bct, sct, bo, bc, so, sc, buy, sell = 0, 0, 0, 0, 0, 0, 0, 0
         maxh, minl = 0, 10000
@@ -167,6 +165,8 @@ class GetXag:
                         so = (so + ma[i] * 1.01) / 2
                         print(e, '空追', tskc, lates)
                         chicang += 1'''
+            if ((sign < -xie and si < -xie )or (sign > xie and si > xie))==False:
+                lateb, lates = 0, 0
         return ee, log
 
 """
