@@ -39,6 +39,7 @@ def get(count, tm,table_name):  #1m,5m,15m,30m,60m qid: 6 agtd, 13 xag, 704 è¿žç
 re_sq='select t from (select count(ts)t,ts from '+table_name+' group by ts)b where t>1'
 del_sq='delete from '+table_name+' order by ts desc limit 1'
 get_sq = 'select ts from '+table_name+' order by ts desc limit 1'
+d.execute(del_sq)
 d.execute(get_sq)
 lasttime = int((d.fetchall())[0][0])
 #lasttime=1533566880000-1
@@ -70,7 +71,7 @@ for i in range(0,666):
 
 print(len(li))
 d.executemany(sq,li)
-d.execute(del_sq)
+
 mydb.commit()
 time.sleep(1)
 '''
