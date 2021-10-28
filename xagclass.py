@@ -51,7 +51,7 @@ class GetXag:
             auth_plugin='mysql_native_password')  # 'caching_sha2_password')  #
         d = mydb.cursor()
 
-        sq = 'select c,h,l,ts,o from '+table  # where ts>1609893464000'
+        sq = 'select c,h,l,ts,o from '+table +' order by ts' # where ts>1609893464000'
         d.execute(sq)
         a = d.fetchall()
         c1, h, l, ts, o = [], [], [], [], []
@@ -81,7 +81,7 @@ class GetXag:
         bct, sct, bo, bc, so, sc, buy, sell = 0, 0, 0, 0, 0, 0, 0, 0
         maxh, minl = 0, 10000
         CIrate ,tax= 1,0.0001
-        for i in range(0, len(c)):  # 5900,2019-12-30
+        for i in range(0, len(c)):  # 5900,2019-12-30 开始,结束 10600
             si = sign
             sign = round((ma[i] - ma[i - 1]) / ma[i - 1] * bei, 5)
             # log.append([si,sign])

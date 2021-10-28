@@ -2,7 +2,7 @@ import xagclass #整数特化ver,期货14,12,6(14,8-12,5-9)
 
 import os
 '''
-fag30,12,15,6
+fag30,12,16,6 震荡18,10,6 爆亏 利润-0.3,胜率0.18
 fag15,30,17,5
 xag   16,15,5
 '''
@@ -21,7 +21,7 @@ for i in range(12,13):#ma
                 xagclass.writeee(fag)
                 print(tex)
                 print(fag[-1])
-                print(log[-1])
+                #print(log[-1])
                 f.write(str(tex)+'\r')
 
 #macag=xagclass.mac_ag(12,1,'ag30')
