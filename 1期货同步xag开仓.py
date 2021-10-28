@@ -1,6 +1,6 @@
 import xagclass #整数特化ver,期货14,12,6(14,8-12,5-9)
-
 import os
+import updataxag
 '''
 fag30,12,15,6
 fag15,30,17,5
@@ -12,7 +12,7 @@ if os.path.exists(r"d:\2.txt"):
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 
 for i in range(12,13):#ma
-    f_ag = xagclass.GetXag(i, 3, 'ag15')
+    f_ag = xagclass.GetXag(i, 3, 'ag30')
     for j in range(15,16):#late
         for k in range(5,6,1):#xie
             for l in range(2,3):#startlate
