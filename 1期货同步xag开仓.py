@@ -1,6 +1,6 @@
 import xagclass #整数特化ver,期货14,12,6(14,8-12,5-9)
 import os
-import updatadb
+#import updatadb
 '''
 fag30,12,15,6
 fag15,30,17,5
