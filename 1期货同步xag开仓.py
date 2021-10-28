@@ -6,7 +6,7 @@ fag30,12,16,6 震荡18,10,6 爆亏 利润-0.3,胜率0.18
 fag15,30,17,5
 xag   16,15,5
 '''
-#import updatedb
+import updatedb
 
 if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
