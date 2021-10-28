@@ -68,10 +68,8 @@ class GetXag:
         self.l = l[ma_range-1:]
         self.ts = ts[ma_range-1:]
         self.o = o[ma_range-1:]
-        print(type(c1[0]))
         #self.ma = get_MA(c1, ma_range)
         self.ma = talib.MA(np.array(c1, dtype=np.float64), timeperiod=ma_range)[ma_range-1:]
-        #print(len(self.c),len(self.ma))
 
     # main
     def ot(self, bei, xie, late_start, late, ma_range):  # 主策略
