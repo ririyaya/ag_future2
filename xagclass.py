@@ -51,7 +51,7 @@ class GetXag:
             auth_plugin='mysql_native_password')  # 'caching_sha2_password')  #
         d = mydb.cursor()
 
-        sq = 'select c,h,l,ts,o from '+table +' order by ts' # where ts>1609893464000'
+        sq = 'select c,h,l,ts,o from '+table +' order by ts'#+' where ts>1635228900000'
         d.execute(sq)
         a = d.fetchall()
         c1, h, l, ts, o = [], [], [], [], []
@@ -128,7 +128,7 @@ class GetXag:
                         bo = (bo + ma[i] * 0.99) / 2
                         print(e, '多追', tskc, lateb)
                         chicang += 1'''
-            if (sign < -xie and si < -xie and sell == 0):# or sct == 1:
+            if (sign < -xie and si < -xie and sell == 0):#or sct == 1:
                 lates += 1
                 lateb = 0
                 bct = 0
