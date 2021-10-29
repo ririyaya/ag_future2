@@ -109,8 +109,8 @@ class GetXag:
                     lates, sell, chicang, maxh, minl = 0, 0, 0, 0, 10000
                 
                 # 开多,low<19收+1开的ma,前1ma>=前2ma
-                if  l[i] <= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))<=h[i] and buy == 0 and (late_start <= lateb <= late) :#and ma[i] >= ma[i - 1]
-                    if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))> o[i]:  # 低于ma开盘开仓
+                if  l[i] <= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and buy == 0  :#and ma[i] >= ma[i - 1]
+                    if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))> o[i]and (late_start <= lateb <= late):  # 低于ma开盘开仓
                         bo = math.ceil(o[i])
                     #elif lateb == 2:
                         bo = math.ceil(o[i])
@@ -146,8 +146,8 @@ class GetXag:
                     # input()
                     lateb, buy, chicang, maxh, minl = 0, 0, 0, 0, 10000
                 
-                if h[i] >= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))>=l[i] and  sell == 0 and (late_start <= lates <= late) :#and ma[i] <= ma[i - 1]:
-                    if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i]:
+                if h[i] >= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and  sell == 0  :#and ma[i] <= ma[i - 1]:
+                    if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and (late_start <= lates <= late):
                         so = math.floor(o[i])
                     #elif lates == 2:
                         so = math.floor(o[i])
