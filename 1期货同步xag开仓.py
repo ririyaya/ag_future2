@@ -21,6 +21,7 @@ for i in range(12,13):#ma
                 tex=(i, l,j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag))
                 xagclass.writeee(fag)
                 print(tex)
+                #print(fag[-2])
                 print(fag[-1])
                 #print(log[-1])
                 f.write(str(tex)+'\r')

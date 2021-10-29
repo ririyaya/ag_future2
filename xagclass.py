@@ -88,7 +88,7 @@ class GetXag:
             if l[i] < minl and (sell == 1 or buy == 1):
                 minl = l[i]
             # 前1角and前2角>xie,且空仓,或有过信号
-            if (sign > xie and si > xie and buy == 0) :#or (bct == 1):
+            if (sign > xie and si > xie and buy == 0):#or (bct == 1):
                 lateb += 1
                 lates = 0
                 sct = 0
@@ -165,8 +165,8 @@ class GetXag:
                         so = (so + ma[i] * 1.01) / 2
                         print(e, '空追', tskc, lates)
                         chicang += 1'''
-            if ((sign < -xie and si < -xie )or (sign > xie and si > xie))==False:
-                lateb, lates = 0, 0
+            #if ((sign < -xie and si < -xie )or (sign > xie and si > xie))==False:# and (sct == 1or bct == 1):
+                #lateb, lates = 0, 0
         return ee, log
 
 """
