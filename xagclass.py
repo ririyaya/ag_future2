@@ -48,7 +48,7 @@ class GetXag:
             user="root",
             passwd="111",
             database='koudai',  # 数据库
-            auth_plugin='mysql_native_password')  # 'caching_sha2_password')  #
+            auth_plugin='mysql_native_password',unix_socket='/private/tmp/mysql.sock') # 'caching_sha2_password')  #
         d = mydb.cursor()
 
         sq = 'select c,h,l,ts,o from '+table +' order by ts'#+' where ts>1635346800000'
