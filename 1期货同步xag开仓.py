@@ -6,7 +6,7 @@ fag30,13,25,5 #震荡18,10,6 爆亏 利润-0.3,胜率0.18
 fag15,30,17,5
 xag   16,15,5
 '''
-#import updatedb
+import updatedb
 
 if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
@@ -22,7 +22,7 @@ for i in range(13,14):#ma
                 #xagclass.writeee(fag)
                 print(tex)
                 #print(fag[-2])
-                print(fag[-1][-3])
+                print(fag[-1])
                 #print(log[-1])
                 f.write(str(tex)+'\r')
 
