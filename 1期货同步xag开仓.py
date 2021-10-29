@@ -1,29 +1,33 @@
 import xagclass #整数特化ver,期货14,12,6(14,8-12,5-9)
+
 import os
-#import updatadb
 '''
-fag30,12,15,6
+fag30,13,20,6 震荡18,10,6 爆亏 利润-0.3,胜率0.18
 fag15,30,17,5
 xag   16,15,5
 '''
+import updatedb
 
 if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 
-for i in range(12,13):#ma
-    f_ag = xagclass.GetXag(i, 3, 'ag30')
-    for j in range(15,16):#late
-        for k in range(5,6,1):#xie
+f_ag = xagclass.GetXag(3, 'ag30')
+for i in range(13,14):#ma
+    for j in range(20,21):#late
+        for k in range(5,6):#xie
             for l in range(2,3):#startlate
-                fag, log=f_ag.ot(100000, k, 2,j, i)
-                tex=(i, l,j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag),round(fag[-1][-1],3))
+                fag, log=f_ag.ot(100000, k, 2,j, f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1, i)
+                tex=(i, l,j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag))
                 #xagclass.writeee(fag)
                 print(tex)
-                print(fag[-1])
-                #f.write(str(tex)+'\r')
+                #print(fag[-2])
+                #print(fag[-1])
+                #print(log[-1])
+                f.write(str(tex)+'\r')
 
-
+#macag=xagclass.mac_ag(12,1,'ag30')
+#maag,log=macag.ot( 100000, 5, 2, 15, 12)
 
 
 '''

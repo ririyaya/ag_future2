@@ -3,9 +3,9 @@ import os
 import re
 import json
 import time
-#import mysql.connector
+import mysql.connector
 import math
-#import numpy as np
+import numpy as np
 #import talib
 
 
@@ -19,10 +19,12 @@ def get(tm,count=25):#type1,2,3,4,5:1m,5m,15m,30m,60m qid 6,agtd,13 xag
 
  return candle
 
+def ma_o(li,candle,ma):
+    o=int(candle[-1]['o'])
+    mao=(o+sum(li[1:ma]))/ma
+    return mao
 
-
-
-ma=12
+ma=13
 
 
 count=25
@@ -37,6 +39,6 @@ while True:
  #print(li)
  for i in range(int(count)-ma):
   rate.append(round((sum(li[i:i+ma])-sum(li[i+1:i+1+ma]))/sum(li[i+1:i+1+ma])*100000,3))
- print(candle[-1]['c'],rate)
+ print(round(ma_o(li, candle, ma),2),rate)
  time.sleep(60)
 
