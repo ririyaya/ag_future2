@@ -33,7 +33,7 @@ for i in range(13,14):#ma
 #maag,log=macag.ot( 100000, 5, 2, 15, 12)
 
 
-'''
+"""
 x_ag=xagclass.Xag(1) #13,13  13-14;12-16
 for i in range(13,14):#ma
     for j in range(13,14):#late
@@ -43,9 +43,6 @@ for i in range(13,14):#ma
         f.write(str(tex) + '\r')
 #xagclass.writeee(xag)
 
-现货  时间  信号  状态
-    
-期货
+"""
 
-'''
 f.close()

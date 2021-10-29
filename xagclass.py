@@ -5,7 +5,6 @@ import re
 import time
 from decimal import Decimal as Dec
 from decimal import getcontext
-
 import mysql.connector
 import numpy as np
 import requests
