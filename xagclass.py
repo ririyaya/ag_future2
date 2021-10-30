@@ -102,7 +102,7 @@ class GetXag:
 
                     ee.append(
                         [float(e), float(Dec(str(so)) - Dec(str(sc))), '空平', sc, ma[i], o[i], c[i], h[i], l[i],
-                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '', chicang,round((float(Dec(str(so)) - Dec(str(sc))))/so,4),CIrate,minl,maxh])
+                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '', chicang,round((float(Dec(str(so)) - Dec(str(sc))))/so,4),CIrate,so-minl,so-maxh])
                     # print(e, '空平',sc,ts[i],si,sign)
                     # print(bo, bc, so, sc, si, sign)
                     lates, sell, chicang, maxh, minl = 0, 0, 0, 0, 10000
@@ -139,7 +139,7 @@ class GetXag:
                     CIrate += round(CIrate * self.__leve * ((bc - bo)/bo - tax),4)
                     ee.append(
                         [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, ma[i], o[i], c[i], h[i], l[i],
-                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '',  chicang,round((float(Dec(str(bc)) - Dec(str(bo))))/bo,4),CIrate,minl,maxh])
+                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '',  chicang,round((float(Dec(str(bc)) - Dec(str(bo))))/bo,4),CIrate,maxh-bo,minl-bo])
                     # print(e, '多平', bc,ts[i],si,sign)
                     # print(bo, bc, so, sc)
                     # input()
