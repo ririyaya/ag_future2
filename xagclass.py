@@ -16,7 +16,6 @@ def get_MA(listc, timeperiod=13):
         ma.append(sum(listc[i - timeperiod:i]) / timeperiod)
     return ma
 
-
 def getrate( ee):
     rat = []
     i = 1
@@ -39,6 +38,8 @@ def writeee( ee):
     print('writeover')
     f.close()
 # 16均线 15延迟
+
+
 
 class GetXag:
     def __init__(self,leve,table='ag15'): #杠杆倍率,表名
@@ -166,7 +167,7 @@ class GetXag:
                         chicang += 1'''
             #if ((sign < -xie and si < -xie )or (sign > xie and si > xie))==False:# and (sct == 1or bct == 1):
                 #lateb, lates = 0, 0
-        return ee, log
+        return ee, log,CIrate
 
 """
 class Xag():

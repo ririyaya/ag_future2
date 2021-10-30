@@ -12,6 +12,7 @@ from decimal import getcontext
 import traceback
 
 class CONNECTSQL():
+
     def __init__(self,table_name,type,count=114):
         re_sq = 'select t from (select count(ts)t,ts from ' + table_name + ' group by ts)b where t>1'
         del_sq = 'delete from ' + table_name + ' order by ts desc limit 1'
@@ -22,6 +23,7 @@ class CONNECTSQL():
             user="root",
             passwd="111",
             database='koudai',  # 数据库
+            buffered=True,
             auth_plugin= 'mysql_native_password',unix_socket='/private/tmp/mysql.sock') # 'caching_sha2_password')#
         self.d = self.mydb.cursor()
         self.d.execute(del_sq)
@@ -41,7 +43,7 @@ class CONNECTSQL():
         li = []
         for i in range(0, len(candle)):
             li.append(tuple(candle[i].values()))
-        # print(len(li))
+        #print(len(li))
         ts = li[0][7]  # 倒叙最新
         return li, ts
 
@@ -49,30 +51,78 @@ class CONNECTSQL():
         li = []
         flag = 0
         tm = int(time.time() * 1000)
-        for i in range(0, 66):
-            print(i)
-            # tm=1620111600000+i*1000*60*60*count
-            if tm <= 1533566880000 - 1:
-                break
-            rev = self.get(self.count, tm)
-            print(rev[0][-1][-1], self.lasttime)
-            # rev[0].reverse()
-            for i in range(len(rev[0])):
-                # print(i, rev[0][i][2])
-                if rev[0][i][7] == self.lasttime:
-                    rev = (rev[0][i + 1:], rev[1])
-                    flag = 1
+        try:
+            for i in range(0, 30):
+                print(i)
+                # tm=1620111600000+i*1000*60*60*count
+                if tm <= 1533566880000 - 1:
                     break
-            li, tm = rev[0] + li, rev[1]
-            if flag == 1:
-                break
-            time.sleep(2)
+                rev = self.get(self.count, tm)
+                print(rev[0][-1][-1], self.lasttime)
+                # rev[0].reverse()
+                for i in range(len(rev[0])):
+                    # print(i, rev[0][i][2])
+                    if rev[0][i][7] == self.lasttime:
+                        rev = (rev[0][i + 1:], rev[1])
+                        flag = 1
+                        break
+                li, tm = rev[0] + li, rev[1]
+                if flag == 1:
+                    break
+                time.sleep(1)
+
+        except:
+            print(len(li))
+            self.d.executemany(self.updata_sq, li)
+            mydb.commit()
+            print('error')
+            time.sleep(1)
 
         print(len(li))
         self.d.executemany(self.updata_sq, li)
         mydb.commit()
         time.sleep(1)
 
+    def updatetxt(self):
+        #if os.path.exists(r"d:\databuffer.txt"):
+            #os.remove(r"d:\databuffer.txt")
+        li = []
+        flag = 0
+        tm = int(time.time() * 1000)
+        tm=1557764520000
+        with open(r"d:\databuffer.txt", "a", encoding='utf-8') as f:
+            try:
+                for i in range(0, 400):
+                    print(i)
+                    # tm=1620111600000+i*1000*60*60*count
+                    if tm <= 1533566880000 - 1:
+                        break
+                    rev = self.get(self.count, tm)
+                    print(rev[0][-1][-1], self.lasttime)
+                    # rev[0].reverse()
+                    for i in range(len(rev[0])):
+                        # print(i, rev[0][i][2])
+                        if rev[0][i][7] == self.lasttime:
+                            rev = (rev[0][i + 1:], rev[1])
+                            flag = 1
+                            break
+                    li, tm = rev[0] + li, rev[1]
+                    if flag == 1:
+                        break
+                    time.sleep(8)
+            except:
+                print(len(li))
+                for i in range(0, len(li)):
+                    f.write(str(li[i]) + '\r')
+                print('error')
+
+            for i in range(0, len(li)):
+                f.write(str(li[i]) + '\r')
+            print('writeover')
+            f.close()
+
+
+# 16均线 15延迟
 
 """
 table_name='ag30'
@@ -153,4 +203,25 @@ try:
 except:
     traceback.print_exc()'''
 
+"""
+
+"""拉取到txt
+f=open(r'd:\databuffer.txt','r')
+li=f.readlines()
+
+mydb = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="111",
+    database='koudai',  # 数据库
+    buffered=True,
+    auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')#
+d = mydb.cursor()
+ll=[]
+insq='insert into ag1 (a,c,t,v,h,l,o,ts) values(%s,%s,%s,%s,%s,%s,%s,%s)'
+for i in range(len(li)):
+    ll.append(tuple(li[i][:-2].replace("'",'').split(',')))
+
+d.executemany(insq, ll)
+mydb.commit()
 """
