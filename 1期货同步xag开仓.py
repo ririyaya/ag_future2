@@ -2,6 +2,7 @@ import xagclass #整数特化ver,期货14,12,6(14,8-12,5-9)
 from updatedb import CONNECTSQL
 import os
 
+
 '''
 fag30,13,25,5 #震荡18,10,6 爆亏 利润-0.3,胜率0.18
 fag15,30,17,5
@@ -16,18 +17,19 @@ con_sql=CONNECTSQL('ag30',4,114)
 if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
-
-f_ag = xagclass.GetXag(3, 'ag1')
-for i in range(13,14):#ma
+m1=xagclass.MIN1(15)
+f_ag = xagclass.GetXag(3, 'ag30')
+for i in range(5,13):#ma
     for j in range(25,26):#late
-        for k in range(5,6):#xie
+        for k in range(2,6):#xie
             for l in range(2,3):#startlate
                 fag, log,CIrate=f_ag.ot(100000, k, 2,j, f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1, i)
-                tex=(i, l,j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag),CIrate)
+                #fag, log, CIrate = f_ag.ot(100000, k, 2, j, m1.o, m1.h, m1.l, m1.ts, m1.c, i)
+                tex=(i, l,j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag),round(CIrate,3))
                 #xagclass.writeee(fag)
                 print(tex)
-                print(fag[-2])
-                print(fag[-1])
+                #print(fag[-2])
+                #print(fag[-1])
                 #print(log[-1])
                 f.write(str(tex)+'\r')
 
@@ -35,6 +37,10 @@ for i in range(13,14):#ma
 #maag,log=macag.ot( 100000, 5, 2, 15, 12)
 
 
+
+
+
+print(fag[-1])
 """
 x_ag=xagclass.Xag(1) #13,13  13-14;12-16
 for i in range(13,14):#ma
