@@ -176,7 +176,7 @@ class GetXag:
 
 
 class MIN1:
-    def __init__(self, ma_range=30, table='ag1'):  # 杠杆倍率,表名
+    def __init__(self, ma_range=30,table='ag1'):  # 杠杆倍率,表名
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -186,7 +186,7 @@ class MIN1:
             unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         d = mydb.cursor()
 
-        sq = 'select c,h,l,ts,o from ' + table + ' order by ts'  # where ts>= 1635469260000
+        sq = 'select c,h,l,ts,o from ' + table + ' order by ts' # where ts>= 1635469260000
         d.execute(sq)
         a = d.fetchall()
         maxh, minl = -1, 100000
@@ -205,11 +205,12 @@ class MIN1:
                 maxh, minl = -1, 100000
             if minl > a[i][2]: minl = a[i][2]
             if maxh < a[i][1]: maxh = a[i][1]
-        self.o = o
+        self.o=o
         self.c = c[1:]
         self.h = h[1:]
         self.l = l[1:]
-        self.ts = ts[1:]
+        self.ts= ts[1:]
+
 
 
 """
@@ -313,7 +314,7 @@ class Xag():
                         [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, round(ma[i],4), o[i], c[i], h[i], l[i],
                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '', chicang,(float(Dec(str(bc)) - Dec(str(bo))))/bo,round(CIrate,4)])
                     lateb, buy, chicang, maxh, minl = 0, 0, 0, 0, 10000
-
+                
                 if h[i] >= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))>=l[i]  and sell == 0 and (late_start <= lates <= late) and self.inner(ts[i]): #and ma[i] <= ma[i - 1] 未来函数 h[i] >= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] :
                         so = o[i]
