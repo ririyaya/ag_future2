@@ -19,10 +19,10 @@ def get(tm,count='25'):#type1,2,3,4,5:1m,5m,15m,30m,60m qid 6,agtd,13 xag
 
  return candle
 
- def ma_o(li, candle, ma):
-  o = int(candle[-1]['o'])
-  mao = (o + sum(li[1:ma])) / ma
-  return mao
+def ma_o(li, candle, ma):
+ o = int(candle[-1]['o'])
+ mao = (o + sum(li[1:ma])) / ma
+ return mao
 
 
 ma = 13

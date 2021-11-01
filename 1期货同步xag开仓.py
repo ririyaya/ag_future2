@@ -11,7 +11,7 @@ xag   16,15,5
 
 
 con_sql=CONNECTSQL('ag30',4,114)
-#con_sql.updatedb(con_sql.mydb)
+con_sql.updatedb(con_sql.mydb)
 #con_sql.updatetxt()
 
 if os.path.exists(r"d:\2.txt"):
@@ -29,8 +29,8 @@ for i in range(13,14):#ma
                 #xagclass.writeee(fag)
                 print(tex)
                 #print(fag[-2])
-                #print(fag[-1])
-                #print(log[-1])
+                print(fag[-1])
+                print(log[-1])
                 f.write(str(tex)+'\r')
 
 #macag=xagclass.mac_ag(12,1,'ag30')
