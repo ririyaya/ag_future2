@@ -88,7 +88,7 @@ class GetXag:
             if l[i] < minl and (sell == 1 or buy == 1):
                 minl = l[i]
             # 前1角and前2角>xie,且空仓,或有过信号
-            if (sign > xie and si > xie and buy == 0):  # or (bct == 1):
+            if sign > xie and si > xie and buy == 0:  # or (bct == 1):
                 lateb += 1
                 lates = 0
                 sct = 0
@@ -129,7 +129,7 @@ class GetXag:
                         bo = (bo + ma[i] * 0.99) / 2
                         print(e, '多追', tskc, lateb)
                         chicang += 1'''
-            if (sign < -xie and si < -xie and sell == 0):  # or sct == 1:
+            if sign < -xie and si < -xie and sell == 0:  # or sct == 1:
                 lates += 1
                 lateb = 0
                 bct = 0
@@ -176,7 +176,7 @@ class GetXag:
 
 
 class MIN1:
-    def __init__(self, ma_range=30,table='ag1'):  # 杠杆倍率,表名
+    def __init__(self, ma_range=30, table='ag1'):  # 杠杆倍率,表名
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -186,7 +186,7 @@ class MIN1:
             unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         d = mydb.cursor()
 
-        sq = 'select c,h,l,ts,o from ' + table + ' order by ts' # where ts>= 1635469260000
+        sq = 'select c,h,l,ts,o from ' + table + ' order by ts'  # where ts>= 1635469260000
         d.execute(sq)
         a = d.fetchall()
         maxh, minl = -1, 100000
@@ -205,12 +205,11 @@ class MIN1:
                 maxh, minl = -1, 100000
             if minl > a[i][2]: minl = a[i][2]
             if maxh < a[i][1]: maxh = a[i][1]
-        self.o=o
+        self.o = o
         self.c = c[1:]
         self.h = h[1:]
         self.l = l[1:]
-        self.ts= ts[1:]
-
+        self.ts = ts[1:]
 
 
 """
@@ -345,7 +344,7 @@ class Xag():
 
 # 16均线 15延迟
 
-class mac_ag:
+class Mac_ag:
     def __init__(self, ma_range, leve, table='ag15'):  # 杠杆倍率,表名
         mydb = mysql.connector.connect(
             host="localhost",

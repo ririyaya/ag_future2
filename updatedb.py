@@ -58,7 +58,8 @@ class CONNECTSQL():
                 if tm <= 1533566880000 - 1:
                     break
                 rev = self.get(self.count, tm)
-                print(rev[0][-1][-1], self.lasttime)
+                print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(rev[0][-1][-1] / 1000)),
+                      time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.lasttime / 1000)))
                 # rev[0].reverse()
                 for i in range(len(rev[0])):
                     # print(i, rev[0][i][2])
@@ -98,7 +99,7 @@ class CONNECTSQL():
                     if tm <= 1533566880000 - 1:
                         break
                     rev = self.get(self.count, tm)
-                    print(rev[0][-1][-1], self.lasttime)
+                    print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(rev[0][-1][-1] / 1000)), time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(self.lasttime/ 1000)))
                     # rev[0].reverse()
                     for i in range(len(rev[0])):
                         # print(i, rev[0][i][2])
