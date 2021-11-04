@@ -66,7 +66,7 @@ class GetXag:
         self.__leve = leve
 
     # main
-    def ot(self, bei, xie, late_start, late, o, h, l, ts, c1, ma_range):  # 主策略
+    def ot(self, bei, slope, ma_range, late_start, late, o, h, l, ts, c1):  # 主策略
         c = c1[ma_range - 1:]
         h = h[ma_range - 1:]
         l = l[ma_range - 1:]
@@ -88,7 +88,7 @@ class GetXag:
             if l[i] < minl and (sell == 1 or buy == 1):
                 minl = l[i]
             # 前1角and前2角>xie,且空仓,或有过信号
-            if sign > xie and si > xie and buy == 0:  # or (bct == 1):
+            if sign > slope and si > slope and buy == 0:  # or (bct == 1):
                 lateb += 1
                 lates = 0
                 sct = 0
@@ -129,7 +129,7 @@ class GetXag:
                         bo = (bo + ma[i] * 0.99) / 2
                         print(e, '多追', tskc, lateb)
                         chicang += 1'''
-            if sign < -xie and si < -xie and sell == 0:  # or sct == 1:
+            if sign < -slope and si < -slope and sell == 0:  # or sct == 1:
                 lates += 1
                 lateb = 0
                 bct = 0
@@ -212,7 +212,6 @@ class MIN1:
         self.ts = ts[1:]
 
 
-"""
 class Xag():
     def __init__(self,leve,table='xag1h'): #杠杆倍率,表名
         mydb = mysql.connector.connect(
@@ -339,7 +338,7 @@ class Xag():
             return True
         else:
             return False
-"""
+
 
 
 # 16均线 15延迟

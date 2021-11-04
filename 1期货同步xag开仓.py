@@ -17,17 +17,17 @@ if os.path.exists(r"d:\2.txt"):
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 # m1=xagclass.MIN1(15)
 f_ag = xagclass.GetXag(3, 'ag30')
-for i in range(13, 14):  # ma
-    for j in range(25, 26):  # late
-        for k in range(5, 6):  # xie
-            for l in range(2, 3):  # startlate
-                fag, log, CIrate = f_ag.ot(100000, k, 2, j, f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1, i)
+for ma_range in range(13, 14):  # ma
+    for maxlate in range(25, 26):  # late
+        for slope in range(5, 6):  # xie
+            for minlate in range(2, 3):  # startlate
+                fag, log, CIrate = f_ag.ot(100000, slope, ma_range, minlate, maxlate, f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1)
                 # fag, log, CIrate = f_ag.ot(100000, k, 2, j, m1.o, m1.h, m1.l, m1.ts, m1.c, i)
-                tex = (i, l, j, k, len(fag) / 2, fag[-1][0], xagclass.getrate(fag), round(CIrate, 3))
+                tex = (ma_range, minlate, maxlate, slope, len(fag) / 2, fag[-1][0], xagclass.getrate(fag), round(CIrate, 3))
                 # xagclass.writeee(fag)
                 print(tex)
-                print(fag[-2])
-                print(fag[-1])
+                #print(fag[-2])
+                #print(fag[-1])
                 # print(log[-1])
                 f.write(str(tex) + '\r')
 
