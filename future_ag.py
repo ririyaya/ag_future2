@@ -25,15 +25,14 @@ for ma_range in range(13, 14):
                 fag, log, CIrate = f_ag.ot(100000, slope, ma_range, minlate, maxlate, f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1)
                 # fag, log, CIrate = f_ag.ot(100000, k, 2, j, m1.o, m1.h, m1.l, m1.ts, m1.c, i)
                 tex = (ma_range, minlate, maxlate, slope, len(fag) / 2, fag[-1][0], qushihuitiao.getrate(fag), round(CIrate, 3))
-                #xagclass.writeee(fag)
+                qushihuitiao.writeee(fag)
                 print(tex)
                 print(fag[-2])
                 print(fag[-1])
                 # print(log[-1])
                 f.write(str(tex) + '\r')
 
-# macag=xagclass.mac_ag(12,1,'ag30')
-# maag,log=macag.ot( 100000, 5, 2, 15, 12)
+
 title = '[总盈亏, 平仓盈亏, 开平方向, 开平点位, ma, o, c, h, l,time, 循环次数, 开仓延迟, 持仓,平仓利润率, 复利利润率, 最大浮盈, 最大浮亏]'
 
 """

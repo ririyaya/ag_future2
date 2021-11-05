@@ -20,7 +20,7 @@ for ma_range in range(16, 17):
                 fag, log, CIrate = f_ag.ot(100000, slope, ma_range, minlate, maxlate, f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1)
                 # fag, log, CIrate = f_ag.ot(100000, k, 2, j, m1.o, m1.h, m1.l, m1.ts, m1.c, i)
                 tex = (ma_range, minlate, maxlate, slope, len(fag) / 2, fag[-1][0], qushihuitiao.getrate(fag), round(CIrate, 3))
-                #xagclass.writeee(fag)
+                #qushihuitiao.writeee(fag)
                 print(tex)
                 print(fag[-2])
                 print(fag[-1])
