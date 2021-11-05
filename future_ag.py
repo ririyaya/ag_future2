@@ -29,6 +29,7 @@ for ma_range in range(13, 14):
                 print(tex)
                 print(fag[-2])
                 print(fag[-1])
+                print('等收线')
                 # print(log[-1])
                 f.write(str(tex) + '\r')
 
