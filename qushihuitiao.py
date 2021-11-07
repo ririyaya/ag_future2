@@ -86,7 +86,7 @@ class GetXag(object):
             if l[i] < minl and (sell == 1 or buy == 1):
                 minl = l[i]
             # 前1角and前2角>xie,且空仓,或有过信号
-            if sign > slope and si > slope and buy == 0:  # or (bct == 1):
+            if sign > slope and si > slope and buy == 0 : #or (bct == 1)
                 lateb += 1
                 lates = 0
                 sct = 0
@@ -109,14 +109,14 @@ class GetXag(object):
 
                 # 开多,low<19收+1开的ma,前1ma>=前2ma
                 if l[i] <= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and buy == 0 and (
-                        lateb <= late):  # and ma[i] >= ma[i - 1]
+                        late_start<=lateb <= late):  # and ma[i] >= ma[i - 1]
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) > o[i] and (
                             late_start <= lateb <= late):  # 低于ma开盘开仓
                         bo = o[i]
-                    elif (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) > o[i] and lateb == 1:
-                        bo = c[i]
+
                     else:
                         bo = math.ceil(round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))  # 19收+1开的ma价挂单开仓
+
                     tskc = ts[i]
                     # print(e, '多开',bo, tskc, lateb,si,sign)
                     ee.append([float(e), '', '多开', bo, ma[i], o[i], c[i], h[i], l[i],
@@ -127,7 +127,7 @@ class GetXag(object):
                         bo = (bo + ma[i] * 0.99) / 2
                         print(e, '多追', tskc, lateb)
                         chicang += 1'''
-            if sign < -slope and si < -slope and sell == 0:  # or sct == 1:
+            if sign < -slope and si < -slope and sell == 0 :  #or sct == 1
                 lates += 1
                 lateb = 0
                 bct = 0
@@ -149,14 +149,15 @@ class GetXag(object):
                     lateb, buy, chicang, maxh, minl = 0, 0, 0, 0, 10000
 
                 if h[i] >= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and sell == 0 and (
-                        lates <= late):  # and ma[i] <= ma[i - 1]:
+                        late_start <= lates <= late):  # and ma[i] <= ma[i - 1]:
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and (late_start <= lates <= late):
                         # elif lates == 2:
                         so = o[i]
-                    elif (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and lates == 1:
-                        so = c[i]
+                    #elif (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and lates == 1:
+                        #so = c[i]
                     else:
                         so = math.floor(round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))
+
                     tskc = ts[i]
                     # print(e, '空开', so,tskc, lates,si,sign)
                     ee.append([float(e), '', '空开', so, ma[i], o[i], c[i], h[i], l[i],
@@ -279,7 +280,7 @@ class Xag():
 
                 # 开多,low<19收+1开的ma,前1ma>=前2ma
                 if l[i] <= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and buy == 0 and (
-                        lateb <= late):  # and ma[i] >= ma[i - 1]
+                        late_start <= lateb <= late):  # and ma[i] >= ma[i - 1]
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) > o[i] and (
                             late_start <= lateb <= late):  # 低于ma开盘开仓
                         bo = o[i]
@@ -317,7 +318,7 @@ class Xag():
                     lateb, buy, chicang, maxh, minl = 0, 0, 0, 0, 10000
 
                 if h[i] >= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and sell == 0 and (
-                        lates <= late):  # and ma[i] <= ma[i - 1]:
+                        late_start <=lates <= late):  # and ma[i] <= ma[i - 1]:
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and (late_start <= lates <= late):
 
                         so = o[i]

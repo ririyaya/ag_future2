@@ -17,7 +17,7 @@ if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 # m1=xagclass.MIN1(15)
-f_ag = qushihuitiao.GetXag(3, 'ag30', 0)  # 杠杆倍率,表,强制循环起点
+f_ag = qushihuitiao.GetXag(3, 'ag30', 0 )  # 杠杆倍率,表,强制循环起点
 for ma_range in range(13, 14):
     for maxlate in range(25, 26):
         for slope in range(5, 6):  # 斜率?
@@ -27,11 +27,11 @@ for ma_range in range(13, 14):
                 tex = (ma_range, minlate, maxlate, slope, len(fag) / 2, fag[-1][0], qushihuitiao.getrate(fag), round(CIrate, 3))
                 qushihuitiao.writeee(fag)
                 print(tex)
-                print(fag[-2])
+                '''print(fag[-2])
                 print(fag[-1])
                 print('等收线')
                 # print(log[-1])
-                #f.write(str(tex) + '\r')
+                #f.write(str(tex) + '\r')'''
 
 
 title = '[总盈亏, 平仓盈亏, 开平方向, 开平点位, ma, o, c, h, l,time, 循环次数, 开仓延迟, 持仓,平仓利润率, 复利利润率, 最大浮盈, 最大浮亏]'
