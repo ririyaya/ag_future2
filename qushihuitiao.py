@@ -91,7 +91,7 @@ class GetXag(object):
                 lates = 0
                 sct = 0
                 bct = 1
-                log.append([lateb, sign, si])
+                log.append([lateb, sign, si,time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000))])
                 if sell == 1:  # 平空
                     sc = float(c[i])  # 正常损
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#偏离值过4%损
@@ -112,9 +112,9 @@ class GetXag(object):
                         lateb <= late):  # and ma[i] >= ma[i - 1]
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) > o[i] and (
                             late_start <= lateb <= late):  # 低于ma开盘开仓
-                        bo = math.ceil(o[i])
-                        # elif lateb == 2:
-                        bo = math.ceil(o[i])
+                        bo = o[i]
+                    elif (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) > o[i] and lateb == 1:
+                        bo = c[i]
                     else:
                         bo = math.ceil(round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))  # 19收+1开的ma价挂单开仓
                     tskc = ts[i]
@@ -132,7 +132,7 @@ class GetXag(object):
                 lateb = 0
                 bct = 0
                 sct = 1
-                log.append([lates, sign, si])
+                log.append([lates, sign, si,time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000))])
                 if buy == 1:
                     bc = float(c[i])
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#
@@ -151,9 +151,10 @@ class GetXag(object):
                 if h[i] >= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and sell == 0 and (
                         lates <= late):  # and ma[i] <= ma[i - 1]:
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and (late_start <= lates <= late):
-                        so = math.floor(o[i])
                         # elif lates == 2:
-                        so = math.floor(o[i])
+                        so = o[i]
+                    elif (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and lates == 1:
+                        so = c[i]
                     else:
                         so = math.floor(round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))
                     tskc = ts[i]

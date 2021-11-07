@@ -5,8 +5,8 @@ import thosttraderapi as api
 FrontAddr="tcp://180.168.146.187:10101"
 #LoginInfo
 BROKERID="9999"
-USERID="070624"
-PASSWORD="070624"
+USERID="193736"
+PASSWORD="6824ads!@#"
 #OrderInfo
 EXCHANGEID="SHFE"
 INSTRUMENTID="rb1909"

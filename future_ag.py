@@ -31,10 +31,17 @@ for ma_range in range(13, 14):
                 print(fag[-1])
                 print('等收线')
                 # print(log[-1])
-                f.write(str(tex) + '\r')
+                #f.write(str(tex) + '\r')
 
 
 title = '[总盈亏, 平仓盈亏, 开平方向, 开平点位, ma, o, c, h, l,time, 循环次数, 开仓延迟, 持仓,平仓利润率, 复利利润率, 最大浮盈, 最大浮亏]'
+f.write(title+'\n')
+for i in range(len(fag)):
+    if fag[i][2] in ['空平','多平']:
+        f.write(str(fag[i])+'\n')
+
+
+
 
 """
 x_ag=xagclass.Xag(1) #13,13  13-14;12-16
