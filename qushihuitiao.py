@@ -9,6 +9,8 @@ import mysql.connector
 import numpy as np
 import requests
 import talib
+import csv
+import codecs
 
 
 def get_MA(listc, timeperiod=13):
@@ -40,6 +42,17 @@ def writeee(ee):
             f.write('\r')
     print('writeover')
     f.close()
+
+def w_csv(ee,name='报表'):
+    root=rf"d:\{name}.csv"
+    with codecs.open(root, "w+", encoding='gbk') as f:
+        headers = ['总盈亏', '平仓盈亏', '开平方向', '开平点位', 'ma', 'o', 'c', 'h', 'l,time', '循环次数', '开仓延迟', '持仓,平仓利润率', '复利利润率',
+                   '最大浮盈', '最大浮亏']
+        f_csv = csv.writer(f)
+        f_csv.writerow(headers)
+        f_csv.writerows(ee)
+        f.flush()
+        f.close()
 
 class GetXag(object):
     def __init__(self, leve, table='ag15', start_i=0):  # 杠杆倍率,表名
