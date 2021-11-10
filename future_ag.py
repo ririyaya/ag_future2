@@ -27,11 +27,11 @@ for ma_range in range(13, 14):
                 tex = (ma_range, minlate, maxlate, slope, len(fag) / 2, fag[-1][0], qushihuitiao.getrate(fag), round(CIrate, 3))
                 qushihuitiao.writeee(fag)
                 print(tex)
-                '''print(fag[-2])
+                print(fag[-2])
                 print(fag[-1])
                 print('等收线')
                 # print(log[-1])
-                #f.write(str(tex) + '\r')'''
+                #f.write(str(tex) + '\r')
 
 
 title = '[总盈亏, 平仓盈亏, 开平方向, 开平点位, ma, o, c, h, l,time, 循环次数, 开仓延迟, 持仓,平仓利润率, 复利利润率, 最大浮盈, 最大浮亏]'
@@ -46,3 +46,5 @@ for i in range(len(fag)):
 
 
 f.close()
+
+input()
