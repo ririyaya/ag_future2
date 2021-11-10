@@ -46,7 +46,7 @@ def writeee(ee):
 def w_csv(ee,name='报表'):
     root=rf"d:\{name}.csv"
     with codecs.open(root, "w+", encoding='gbk') as f:
-        headers = ['总盈亏', '平仓盈亏', '开平方向', '开平点位', 'ma', 'o', 'c', 'h', 'l,time', '循环次数', '开仓延迟', '持仓,平仓利润率', '复利利润率',
+        headers = ['总盈亏', '平仓盈亏', '开平方向', '开平点位', 'ma', 'o', 'c', 'h', 'l','time', '循环次数', '开仓延迟', '持仓','平仓利润率', '复利利润率',
                    '最大浮盈', '最大浮亏']
         f_csv = csv.writer(f)
         f_csv.writerow(headers)

@@ -35,12 +35,12 @@ for ma_range in range(13, 14):
 
 
 title = '[总盈亏, 平仓盈亏, 开平方向, 开平点位, ma, o, c, h, l,time, 循环次数, 开仓延迟, 持仓,平仓利润率, 复利利润率, 最大浮盈, 最大浮亏]'
-f.write(title+'\n')
+exetend=[]
 for i in range(len(fag)):
     if fag[i][2] in ['空平','多平']:
-        f.write(str(fag[i])+'\n')
+        exetend.append(fag[i])
 
-
+qushihuitiao.w_csv(exetend,'报表扩展')
 
 
 
