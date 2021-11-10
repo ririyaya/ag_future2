@@ -17,7 +17,7 @@ if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 # m1=xagclass.MIN1(15)
-f_ag = qushihuitiao.GetXag(3, 'ag30', 0 )  # 杠杆倍率,表,强制循环起点
+f_ag = qushihuitiao.GetXag(1, 'ag30', 0 )  # 杠杆倍率,表,强制循环起点
 for ma_range in range(13, 14):
     for maxlate in range(25, 26):
         for slope in range(5, 6):  # 斜率?
