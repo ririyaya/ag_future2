@@ -1,4 +1,5 @@
-import qushihuitiao  # 整数特化ver,期货14,12,6(14,8-12,5-9)
+import time
+import trend  # 整数特化ver,期货14,12,6(14,8-12,5-9)
 from updatedb import CONNECTSQL
 import os
 
@@ -17,15 +18,15 @@ if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 # m1=xagclass.MIN1(15)
-f_ag = qushihuitiao.GetXag(1, 'ag30', 0 )  # 杠杆倍率,表,强制循环起点
+f_ag = trend.GetXag(1, 'ag30', 0)  # 杠杆倍率,表,强制循环起点
 for ma_range in range(13, 14):
     for maxlate in range(25, 26):
         for slope in range(5, 6):  # 斜率?
             for minlate in range(2, 3):  # startlate
                 fag, log, CIrate = f_ag.ot(100000, slope, ma_range, minlate, maxlate, f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1)
                 # fag, log, CIrate = f_ag.ot(100000, k, 2, j, m1.o, m1.h, m1.l, m1.ts, m1.c, i)
-                tex = (ma_range, minlate, maxlate, slope, len(fag) / 2, fag[-1][0], qushihuitiao.getrate(fag), round(CIrate, 3))
-                qushihuitiao.w_csv(fag)
+                tex = (ma_range, minlate, maxlate, slope, len(fag) / 2, fag[-1][0], trend.getrate(fag), round(CIrate, 3))
+                trend.w_csv(fag)
                 print(tex)
                 print(fag[-2])
                 print(fag[-1])
@@ -40,9 +41,10 @@ for i in range(len(fag)):
     if fag[i][2] in ['空平','多平']:
         exetend.append(fag[i])
 
-qushihuitiao.w_csv(exetend,'报表扩展')
+trend.w_csv(exetend, '报表扩展')
 
-
-
-
+try:
+    time.sleep(1)
+except Exception as e:
+    print(e)
 f.close()

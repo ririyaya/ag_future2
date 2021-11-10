@@ -19,6 +19,7 @@ def get_MA(listc, timeperiod=13):
         ma.append(sum(listc[i - timeperiod:i]) / timeperiod)
     return ma
 
+
 def getrate(ee):
     rat = []
     i = 1
@@ -31,28 +32,32 @@ def getrate(ee):
             torat1 += 1
     return round(torat1 / len(rat), 4)
 
+
 def writeee(ee):
     if os.path.exists(r"d:\1.txt"):
         os.remove(r"d:\1.txt")
     with open(r"d:\1.txt", "a", encoding='utf-8') as f:
         title = '[总盈亏, 平仓盈亏, 开平方向, 开平点位, ma, o, c, h, l,time, 循环次数, 开仓延迟, 持仓,平仓利润率, 复利利润率, 最大浮盈, 最大浮亏]'
-        f.write(title+'\n')
+        f.write(title + '\n')
         for i in range(0, len(ee)):
             f.write(format(ee[i]))
             f.write('\r')
     print('writeover')
     f.close()
 
-def w_csv(ee,name='报表'):
-    root=rf"d:\{name}.csv"
+
+def w_csv(ee, name='报表'):
+    root = rf"d:\{name}.csv"
     with codecs.open(root, "w+", encoding='gbk') as f:
-        headers = ['总盈亏', '平仓盈亏', '开平方向', '开平点位', 'ma', 'o', 'c', 'h', 'l','time', '循环次数', '开仓延迟', '持仓','平仓利润率', '复利利润率',
+        headers = ['总盈亏', '平仓盈亏', '开平方向', '开平点位', 'ma', 'o', 'c', 'h', 'l', 'time', '循环次数', '开仓延迟', '持仓', '平仓利润率',
+                   '复利利润率',
                    '最大浮盈', '最大浮亏']
         f_csv = csv.writer(f)
         f_csv.writerow(headers)
         f_csv.writerows(ee)
         f.flush()
         f.close()
+
 
 class GetXag(object):
     def __init__(self, leve, table='ag15', start_i=0):  # 杠杆倍率,表名
@@ -73,7 +78,7 @@ class GetXag(object):
             self.l.append(round(a[i][2], 5))
             self.ts.append(a[i][3])
             self.o.append(round(a[i][4], 5))
-        self.start_i=start_i
+        self.start_i = start_i
         self.__leve = leve
 
     # main
@@ -99,12 +104,12 @@ class GetXag(object):
             if l[i] < minl and (sell == 1 or buy == 1):
                 minl = l[i]
             # 前1角and前2角>xie,且空仓,或有过信号
-            if sign > slope and si > slope and buy == 0 : #or (bct == 1)
+            if sign > slope and si > slope and buy == 0:  # or (bct == 1)
                 lateb += 1
                 lates = 0
                 sct = 0
                 bct = 1
-                log.append([lateb, sign, si,time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000))])
+                log.append([lateb, sign, si, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000))])
                 if sell == 1:  # 平空
                     sc = float(c[i])  # 正常损
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#偏离值过4%损
@@ -122,7 +127,7 @@ class GetXag(object):
 
                 # 开多,low<19收+1开的ma,前1ma>=前2ma
                 if l[i] <= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and buy == 0 and (
-                        late_start<=lateb <= late):  # and ma[i] >= ma[i - 1]
+                        late_start <= lateb <= late):  # and ma[i] >= ma[i - 1]
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) > o[i] and (
                             late_start <= lateb <= late):  # 低于ma开盘开仓
                         bo = o[i]
@@ -140,12 +145,12 @@ class GetXag(object):
                         bo = (bo + ma[i] * 0.99) / 2
                         print(e, '多追', tskc, lateb)
                         chicang += 1'''
-            if sign < -slope and si < -slope and sell == 0 :  #or sct == 1
+            if sign < -slope and si < -slope and sell == 0:  # or sct == 1
                 lates += 1
                 lateb = 0
                 bct = 0
                 sct = 1
-                log.append([lates, sign, si,time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000))])
+                log.append([lates, sign, si, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000))])
                 if buy == 1:
                     bc = float(c[i])
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#
@@ -166,8 +171,8 @@ class GetXag(object):
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and (late_start <= lates <= late):
                         # elif lates == 2:
                         so = o[i]
-                    #elif (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and lates == 1:
-                        #so = c[i]
+                    # elif (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and lates == 1:
+                    # so = c[i]
                     else:
                         so = math.floor(round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))
 
@@ -244,7 +249,7 @@ class Xag():
             self.l.append(round(a[i][2], 5))
             self.ts.append(a[i][3])
             self.o.append(round(a[i][4], 5))
-        self.start_i=start_i
+        self.start_i = start_i
         self.__leve = leve
 
     # main bei扩展倍数 xie比较斜率 late延迟开仓k
@@ -287,7 +292,7 @@ class Xag():
                         [float(e), float(Dec(str(so)) - Dec(str(sc))), '空平', sc, ma[i], o[i], c[i], h[i], l[i],
                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '', chicang,
                          round((float(Dec(str(so)) - Dec(str(sc)))) / so, 4), CIrate, so - minl, so - maxh])
-                    #print(e, '空平',sc,ts[i],si,sign)
+                    # print(e, '空平',sc,ts[i],si,sign)
                     # print(bo, bc, so, sc, si, sign)
                     lates, sell, chicang, maxh, minl = 0, 0, 0, 0, 10000
 
@@ -298,9 +303,9 @@ class Xag():
                             late_start <= lateb <= late):  # 低于ma开盘开仓
                         bo = o[i]
                     else:
-                        bo = round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3) # 19收+1开的ma价挂单开仓
+                        bo = round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)  # 19收+1开的ma价挂单开仓
                     tskc = ts[i]
-                    #print(e, '多开',bo, tskc, lateb,si,sign)
+                    # print(e, '多开',bo, tskc, lateb,si,sign)
                     ee.append([float(e), '', '多开', bo, ma[i], o[i], c[i], h[i], l[i],
                                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, lateb])
                     lateb, bct, buy = 0, 2, 1
@@ -325,20 +330,20 @@ class Xag():
                         [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, ma[i], o[i], c[i], h[i], l[i],
                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, '', chicang,
                          round((float(Dec(str(bc)) - Dec(str(bo)))) / bo, 4), CIrate, maxh - bo, minl - bo])
-                    #print(e, '多平', bc,ts[i],si,sign)
+                    # print(e, '多平', bc,ts[i],si,sign)
                     # print(bo, bc, so, sc)
                     # input()
                     lateb, buy, chicang, maxh, minl = 0, 0, 0, 0, 10000
 
                 if h[i] >= (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) and sell == 0 and (
-                        late_start <=lates <= late):  # and ma[i] <= ma[i - 1]:
+                        late_start <= lates <= late):  # and ma[i] <= ma[i - 1]:
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and (late_start <= lates <= late):
 
                         so = o[i]
                     else:
                         so = round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)
                     tskc = ts[i]
-                    #print(e, '空开', so,tskc, lates,si,sign)
+                    # print(e, '空开', so,tskc, lates,si,sign)
                     ee.append([float(e), '', '空开', so, ma[i], o[i], c[i], h[i], l[i],
                                time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i] / 1000)), i, lates])
                     # print(bo, bc, so, sc, o[i], c[i], h[i], l[i], round(ma[i], 2))
@@ -353,15 +358,12 @@ class Xag():
             # lateb, lates = 0, 0
         return ee, log, CIrate
 
-    def inner(self,ts):
+    def inner(self, ts):
         a = int((ts / 1000 - 345600 + 3600 * 8) % (86400) / 3600)
-        list=[9,10,11,1,2,3,21,22,23,0,1,2]
-        if a  in list:
+        list = [9, 10, 11, 1, 2, 3, 21, 22, 23, 0, 1, 2]
+        if a in list:
             return True
         else:
             return False
 
-
-
 # 16均线 15延迟
-
