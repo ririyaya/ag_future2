@@ -371,7 +371,29 @@ class Xag():
 # 16均线 15延迟
 
 class f_mod(GetXag):
-    __leve=1
+    def __init__(self, leve, table='ag15', start_i=2,):  # 杠杆倍率,表名
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            passwd="111",
+            database='koudai',  # 数据库
+            auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
+        d = mydb.cursor()
+        sq = 'select c,h,l,ts,o from ' + table + ' order by ts'  # +' where ts>1635346800000'
+        d.execute(sq)
+        a = d.fetchall()
+        self.c1, self.h, self.l, self.ts, self.o = [], [], [], [], []
+        for i in range(0, len(a)):
+            self.c1.append(round(a[i][0], 5))
+            self.h.append(round(a[i][1], 5))
+            self.l.append(round(a[i][2], 5))
+            self.ts.append(a[i][3])
+            self.o.append(round(a[i][4], 5))
+        self.start_i = start_i
+        self.__leve = leve
+
+    # main
+
     def ot(self, bei, slope, ma_range, late_start, late, o, h, l, ts, c1):  # 主策略
         c = c1[ma_range - 1:]
         h = h[ma_range - 1:]

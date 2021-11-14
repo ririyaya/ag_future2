@@ -18,7 +18,7 @@ if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 # m1=xagclass.MIN1(15)
-f_ag = trend.GetXag(1, 'ag30', 0)  # 杠杆倍率,表,强制循环起点
+f_ag = trend.f_mod(1, 'ag30')  # 杠杆倍率,表,强制循环起点
 for ma_range in range(13, 14):
     for maxlate in range(25, 26):
         for slope in range(5, 6):  # 斜率?
@@ -42,8 +42,8 @@ for i in range(1,len(fag)):
     if fag[i][2] in ['空平','多平']:
         exetend.append(fag[i]+[fag[i][10]-fag[i-1][10]]+[fag[i-1][11]])
 
-trend.w_csv(exetend, '报表扩展1')
-trend.w_csv(fag, '报表1')
+trend.w_csv(exetend, '报表扩展')
+trend.w_csv(fag, '报表')
 
 try:
     time.sleep(1)
