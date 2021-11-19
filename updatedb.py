@@ -10,7 +10,7 @@ import talib
 from decimal import Decimal
 from decimal import getcontext
 import traceback
-
+#load data local infile "/Users/v_yangxing04/Downloads/ugc16.csv" into table ugc16 fields terminated by ','  enclosed by '"' lines terminated by '\n' ignore 1 rows;
 
 
 class CONNECTSQL(object):
@@ -247,6 +247,12 @@ mydb.commit()
 """
 
 if __name__ == '__main__':
-    con_sql = CONNECTSQL('ag15', 3, 114)
+    con_sql = CONNECTSQL('ag15', 3, 228)
     con_sql.updatedb(con_sql.mydb)
     print('更新ag15')
+    con_sql = CONNECTSQL('ag30', 4, 228)
+    con_sql.updatedb(con_sql.mydb)
+    print('更新ag30')
+    con_sql = CONNECTSQL('ag60', 5, 228)
+    con_sql.updatedb(con_sql.mydb)
+    print('更新ag60')
