@@ -19,10 +19,10 @@ if os.path.exists(r"d:\2.txt"):
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 # m1=xagclass.MIN1(15)
 f_ag = trend.f_mod(1, 'ag30')  # 杠杆倍率,表,强制循环起点
-for ma_range in range(13, 14):
+for ma_range in range(6, 7):
     for maxlate in range(25, 26):
         for slope in range(5, 6):  # 斜率?
-            for minlate in range(2, 3):  # startlate
+            for minlate in range(1, 2):  # startlate
                 fag, log, CIrate = f_ag.ot(100000, slope, ma_range, minlate, maxlate, f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1)
                 # fag, log, CIrate = f_ag.ot(100000, k, 2, j, m1.o, m1.h, m1.l, m1.ts, m1.c, i)
                 tex = (ma_range, minlate, maxlate, slope, len(fag) / 2, fag[-1][0], trend.getrate(fag), round(CIrate, 3))
