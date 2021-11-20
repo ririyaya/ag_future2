@@ -24,7 +24,7 @@ class CONNECTSQL(object):
         host="localhost",
             user="root",
             passwd="111",
-            database='koudai',  # 数据库
+            database='futures',  # 数据库
             buffered=True,
             auth_plugin= 'mysql_native_password',unix_socket='/private/tmp/mysql.sock') # 'caching_sha2_password')#
         self.d = self.mydb.cursor()
@@ -247,6 +247,12 @@ mydb.commit()
 """
 
 if __name__ == '__main__':
-    con_sql = CONNECTSQL('ag15', 3, 114)
+    con_sql = CONNECTSQL('ag15', 3, 1140)
     con_sql.updatedb(con_sql.mydb)
     print('更新ag15')
+    con_sql = CONNECTSQL('ag30', 4, 1140)
+    con_sql.updatedb(con_sql.mydb)
+    print('更新ag30')
+    con_sql = CONNECTSQL('ag60', 5, 1140)
+    con_sql.updatedb(con_sql.mydb)
+    print('更新ag60')

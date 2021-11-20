@@ -19,7 +19,7 @@ if os.path.exists(r"d:\2.txt"):
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 # m1=xagclass.MIN1(15)
 f_ag = trend.f_mod(1, 'ag30')  # 杠杆倍率,表,强制循环起点
-for ma_range in range(6, 7):
+for ma_range in range(7, 8):
     for maxlate in range(25, 26):
         for slope in range(5, 6):  # 斜率?
             for minlate in range(1, 2):  # startlate
@@ -51,4 +51,4 @@ except Exception as e:
     print(e)
 f.close()
 
-input()
+

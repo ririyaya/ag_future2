@@ -376,10 +376,10 @@ class f_mod(GetXag):
             host="localhost",
             user="root",
             passwd="111",
-            database='koudai',  # 数据库
+            database='futures',  # 数据库
             auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         d = mydb.cursor()
-        sq = 'select c,h,l,ts,o from ' + table + ' order by ts'  # +' where ts>1635346800000'
+        sq = 'select c,h,l,ts,o from ' + table + ' group by c,h,l,ts,o order by ts'  # +' where ts>1635346800000'
         d.execute(sq)
         a = d.fetchall()
         self.c1, self.h, self.l, self.ts, self.o = [], [], [], [], []
