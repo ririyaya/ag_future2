@@ -226,7 +226,7 @@ class MIN1:
 
 # 16均线 15延迟
 class Xag():
-    def __init__(self, leve, table='xag1h', start_i=0):  # 杠杆倍率,表名
+    def __init__(self, leve, table='xag1h', start_i=2):  # 杠杆倍率,表名
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -261,7 +261,7 @@ class Xag():
         bct, sct, bo, bc, so, sc, buy, sell = 0, 0, 0, 0, 0, 0, 0, 0
         maxh, minl = 0, 10000
         CIrate, tax = 1, 0.00005
-        for i in range(self.start_i, 8700):#len(c)):  # 5900,2019-12-30 开始,结束 10600
+        for i in range(self.start_i, len(c)):  # 5900,2019-12-30 开始,结束 10600
             si = sign
             sign = round((ma[i - 1] - ma[i - 2]) / ma[i - 2] * bei, 5)
             # log.append([si,sign])
@@ -270,17 +270,17 @@ class Xag():
             if l[i] < minl and (sell == 1 or buy == 1):
                 minl = l[i]
             # 前1角and前2角>xie,且空仓,或有过信号
-            if sign > slope and si > slope and buy == 0:  # or (bct == 1):
+            if sign > slope and si>slope and buy == 0:  # or (bct == 1):
                 lateb += 1
                 lates = 0
                 sct = 0
                 bct = 1
                 log.append([lateb, sign, si])
                 if sell == 1:  # 平空
-                    sc = math.ceil(float(c[i - 1])*100)/100  # 正常损
+                    sc = (float(c[i - 1])*100)/100  # 正常损
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#偏离值过4%损
                     # sc=float(o[i])
-                    e = math.ceil((Dec(str(e)) + Dec(str(so)) - Dec(str(sc)))*100)/100 * (chicang + 1)  # 平仓差额
+                    e = ((Dec(str(e)) + Dec(str(so)) - Dec(str(sc)))*100)/100 * (chicang + 1)  # 平仓差额
                     CIrate += round(CIrate * self.__leve * ((so - sc) / so - tax), 4)
 
                     ee.append(
@@ -296,9 +296,9 @@ class Xag():
                         late_start <= lateb <= late):  # and ma[i] >= ma[i - 1]
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) > o[i] and (
                             late_start <= lateb <= late):  # 低于ma开盘开仓
-                        bo = math.ceil(o[i]*100)/100
+                        bo = (o[i]*100)/100
                     else:
-                        bo = math.ceil((round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))*100)/100  # 19收+1开的ma价挂单开仓
+                        bo = ((round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))*100)/100  # 19收+1开的ma价挂单开仓
                     tskc = ts[i]
                     # print(e, '多开',bo, tskc, lateb,si,sign)
                     ee.append([float(e), '', '多开', bo, ma[i], o[i], c[i], h[i], l[i],
@@ -309,17 +309,17 @@ class Xag():
                         bo = (bo + ma[i] * 0.99) / 2
                         print(e, '多追', tskc, lateb)
                         chicang += 1'''
-            if sign < -slope and si < -slope and sell == 0:  # or sct == 1:
+            if sign < -slope  and sell == 0 and si<-slope:  # or sct == 1:
                 lates += 1
                 lateb = 0
                 bct = 0
                 sct = 1
                 log.append([lates, sign, si])
                 if buy == 1:
-                    bc = math.floor(float(c[i - 1])*100)/100
+                    bc = (float(c[i - 1])*100)/100
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#
                     # bc=float(o[i])
-                    e = math.floor((Dec(str(e)) + Dec(str(bc)) - Dec(str(bo)))*100)/100 * (chicang + 1)
+                    e = ((Dec(str(e)) + Dec(str(bc)) - Dec(str(bo)))*100)/100 * (chicang + 1)
                     CIrate += round(CIrate * self.__leve * ((bc - bo) / bo - tax), 4)
                     ee.append(
                         [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, ma[i - 1], o[i - 1], c[i - 1], h[i - 1], l[i - 1],
@@ -334,9 +334,9 @@ class Xag():
                         late_start <= lates <= late):  # and ma[i] <= ma[i - 1]:
                     if (round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3)) < o[i] and (late_start <= lates <= late):
 
-                        so = math.floor(o[i]*100)/100
+                        so = (o[i]*100)/100
                     else:
-                        so = math.floor((round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))*100)/100
+                        so = ((round(ma[i], 3) - round((c[i] - o[i]) / ma_range, 3))*100)/100
                     tskc = ts[i]
                     # print(e, '空开', so,tskc, lates,si,sign)
                     ee.append([float(e), '', '空开', so, ma[i], o[i], c[i], h[i], l[i],
@@ -352,6 +352,7 @@ class Xag():
             # if ((sign < -xie and si < -xie )or (sign > xie and si > xie))==False:# and (sct == 1or bct == 1):
             # lateb, lates = 0, 0
         return ee, log, CIrate
+
 
     def inner(self, ts):
         a = int((ts / 1000 - 345600 + 3600 * 8) % (86400) / 3600)
@@ -545,7 +546,7 @@ class k_mod(object):
             if l[i] < minl and (sell == 1 or buy == 1):
                 minl = l[i]
             # 前1角and前2角>xie,且空仓,或有过信号
-            if sign > slope and buy == 0:  # or (bct == 1)
+            if sign > slope and si>slope and buy == 0:  # or (bct == 1)
                 lateb += 1
                 lates = 0
                 sct = 0
@@ -583,7 +584,7 @@ class k_mod(object):
                         bo = (bo + ma[i] * 0.99) / 2
                         print(e, '多追', tskc, lateb)
                         chicang += 1'''
-            if sign < -slope and sell == 0:  # or sct == 1
+            if sign < -slope and si<-slope and sell == 0:  # or sct == 1
                 lates += 1
                 lateb = 0
                 bct = 0

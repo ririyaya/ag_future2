@@ -19,10 +19,10 @@ if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
 # m1=xagclass.MIN1(15)
-f_ag = trend.k_mod(2, 'ag60')  # 杠杆倍率,表,强制循环起点
-for ma_range in range(7, 8):
-    for slope in range(3, 4):
-        for maxlate in range(4, 5):  # 斜率?
+f_ag = trend.k_mod(2, 'ag30')  # 杠杆倍率,表,强制循环起点
+for ma_range in range(14, 35):
+    for slope in range(4, 5):
+        for maxlate in range(9, 10):  # 斜率?
             for minlate in range(2, 3):  # startlate
                 fag, log, CIrate = f_ag.ot(100000, slope, ma_range, minlate, maxlate, f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1)
                 # fag, log, CIrate = f_ag.ot(100000, k, 2, j, m1.o, m1.h, m1.l, m1.ts, m1.c, i)
