@@ -11,7 +11,7 @@ ag06=['16','17','18','19','20','21','22' ]
 ./mysql --local-infile=1 -uroot -p 
 set global local_infile = 1;
 create table tick_2206 (detm datetime,datetime_nano char(32),last_price int,highest int,lowest int,volume int,amount int,open_interest int,bid_price1 int,bid_volume1 int,ask_price1 int,ask_volume1 int);
-mysql> LOAD DATA LOCAL INFILE '/home/erik/Documents/out10-2.csv'
+LOAD DATA LOCAL INFILE '/home/erik/Documents/out10-2.csv'
 INTO TABLE out10
 FIELDS TERMINATED BY ','
 IGNORE 1 LINES

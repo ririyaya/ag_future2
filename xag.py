@@ -15,7 +15,7 @@ con_sql = Updatexag('xag1h', 5, 114)
 #con_sql.updatedb(con_sql.mydb)
 # con_sql.updatetxt()
 
-
+explain=[]
 if os.path.exists(r"d:\2.txt"):
     os.remove(r"d:\2.txt")
 f = open(r"d:\2.txt", "a", encoding='utf-8')
@@ -31,6 +31,7 @@ for ma_range in range(16, 17):
                 tex = (ma_range, minlate, maxlate, slope, len(fag) / 2, fag[-1][0], trend.getrate(fag), round(CIrate, 3))
                 #qushihuitiao.writeee(fag)
                 print(tex)
+                explain.append(trend.draw(fag))
                 #print(fag[-2])
                 #print(fag[-1])
                 # print(log[-1])

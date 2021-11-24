@@ -11,7 +11,32 @@ import requests
 import talib
 import csv
 import codecs
+import numpy as np
+import matplotlib.pyplot as plt  # 重命名为plt
 
+def draw(fag):
+    exetend=[]
+    for i in range(1, len(fag)):
+        if fag[i][2] in ['空平', '多平']:
+            exetend.append(fag[i] + [fag[i][10] - fag[i - 1][10]] + [fag[i - 1][11]])
+    x, y = [], []
+    for i in range(len(exetend)):
+        y.append(exetend[i][-5])
+        x.append(i)
+
+    plt.scatter(x, y)
+    z = np.polyfit(x, y, 1)  # 1次多项式拟合
+    p = np.poly1d(z)  # 将z转为多项式
+    print(p)  # y=ax+b
+
+    y1 = p(x)  # 打印出拟合的值
+
+    plt.plot(x, y1, '-')
+    plt.plot(x, y, '.', x, y1, '-r')  # '-r'表示用红线画出
+
+    plt.show()
+    print('--------------------------------------')
+    return p
 
 def get_MA(listc, timeperiod=13):
     ma = []
