@@ -3,10 +3,10 @@ import os
 import re
 import json
 import time
-import mysql.connector
+# import mysql.connector
 import math
-import numpy as np
-import talib
+# import numpy as np
+# import talib
 
 ma = 13          #13,16
 def get(tm, count=25):  # type1,2,3,4,5:1m,5m,15m,30m,60m qid   6,agtd,    13 xag ,   704 fu

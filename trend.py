@@ -8,13 +8,13 @@ from decimal import getcontext
 import mysql.connector
 import numpy as np
 import requests
-import talib
+# import talib
 import csv
 import codecs
 import numpy as np
 import matplotlib.pyplot as plt  # 重命名为plt
 
-def draw(fag):
+def draw(fag,ma_range):
     exetend=[]
     for i in range(1, len(fag)):
         if fag[i][2] in ['空平', '多平']:
@@ -24,15 +24,15 @@ def draw(fag):
         y.append(exetend[i][-5])
         x.append(i)
 
-    plt.scatter(x, y)
+    # plt.scatter(x, y)
     z = np.polyfit(x, y, 1)  # 1次多项式拟合
     p = np.poly1d(z)  # 将z转为多项式
     print(p)  # y=ax+b
 
     y1 = p(x)  # 打印出拟合的值
-
-    plt.plot(x, y1, '-')
-    plt.plot(x, y, '.', x, y1, '-r')  # '-r'表示用红线画出
+    plt.title(str(ma_range))
+    # plt.plot(x, y1, '-')
+    plt.plot(x, y, '-', x, y1, '-r')  # '-r'表示用红线画出
 
     plt.show()
     print('--------------------------------------')
@@ -69,7 +69,7 @@ def writeee(ee):
     f.close()
 
 def w_csv(ee, name='报表'):
-    root = rf"d:\{name}.csv"
+    root = rf"c:\{name}.csv"
     with codecs.open(root, "w+", encoding='gbk') as f:
         headers = ['总盈亏', '平仓盈亏', '开平方向', '开平点位', 'ma', 'o', 'c', 'h', 'l', 'time', '循环次数', '开仓延迟', '持仓', '平仓利润率',
                    '复利利润率',
@@ -251,7 +251,7 @@ class MIN1:
 
 # 16均线 15延迟
 class Xag():
-    def __init__(self, leve, table='xag1h', start_i=2):  # 杠杆倍率,表名
+    def __init__(self, leve, ma_range, table='xag1h', start_i=2):  # 杠杆倍率,表名
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -259,27 +259,29 @@ class Xag():
             database='koudai',  # 数据库
             auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         d = mydb.cursor()
-        sq = 'select c,h,l,ts,o from ' + table + ' order by ts'  # +' where ts>1635346800000'
+        sq = 'select c,h,l,ts,o, avg (c)over (order by ts rows between '+str(ma_range)+' preceding and current row )ma  from ' + table + ' order by ts'  # +' where ts>1635346800000'
         d.execute(sq)
         a = d.fetchall()
-        self.c1, self.h, self.l, self.ts, self.o = [], [], [], [], []
+        self.c1, self.h, self.l, self.ts, self.o, self.ma= [], [], [], [], [], []
         for i in range(0, len(a)):
             self.c1.append(round(a[i][0], 5))
             self.h.append(round(a[i][1], 5))
             self.l.append(round(a[i][2], 5))
             self.ts.append(a[i][3])
             self.o.append(round(a[i][4], 5))
+            self.ma.append(float(round(a[i][5], 5)))
         self.start_i = start_i
         self.__leve = leve
 
     # main bei扩展倍数 xie比较斜率 late延迟开仓k
-    def ot(self, bei, slope, ma_range, late_start, late, o, h, l, ts, c1):  # 主策略
+    def ot(self, bei, slope, ma_range, late_start, late, o, h, l, ts, c1,ma):  # 主策略
         c = c1[ma_range - 1:]
         h = h[ma_range - 1:]
         l = l[ma_range - 1:]
         ts = ts[ma_range - 1:]
         o = o[ma_range - 1:]
-        ma = talib.MA(np.array(c1, dtype=np.float64), timeperiod=ma_range)[ma_range - 1:]
+        ma = ma[ma_range - 1:]
+        # ma = talib.MA(np.array(c1, dtype=np.float64), timeperiod=ma_range)[ma_range - 1:]
         ee, log = [], []
         lateb, lates, chicang = 0, 0, 0
         si, sign, e = 0, 0, 0
