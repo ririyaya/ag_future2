@@ -18,7 +18,7 @@ class CONNECTSQL(object):
     def __init__(self,table_name,type,count=114):
         re_sq = 'select t from (select count(ts)t,ts from ' + table_name + ' group by ts)b where t>1'
         del_sq = 'delete from ' + table_name + ' order by ts desc limit 1'
-        get_sq = 'select ts from ' + table_name + ' order by ts desc limit 1'
+        get_sq = 'select ts,t from ' + table_name + ' order by ts desc limit 1'
         self.updata_sq = 'insert into ' + table_name + ' (a,c,t,v,h,l,o,ts) values(%s,%s,%s,%s,%s,%s,%s,%s)'
         self.mydb = mysql.connector.connect(
         host="localhost",
@@ -32,7 +32,8 @@ class CONNECTSQL(object):
         self.d.execute(del_sq)
         self.d.execute(get_sq)
         self.lasttime = 1333566880000 - 1
-        # self.lasttime = int((self.d.fetchall())[0][0])
+        # print((self.d.fetchall()))
+        self.lasttime = int((self.d.fetchall())[0][0])
         self.type=type
         self.count = count
 
@@ -73,7 +74,7 @@ class CONNECTSQL(object):
                 li, tm = rev[0] + li, rev[1]
                 if flag == 1:
                     break
-                time.sleep(1)
+                time.sleep(5)
 
         except:
             print(len(li))
@@ -149,5 +150,12 @@ if __name__ == '__main__':
     con_sql = Updatexag('xag1d', 6, 214)
     con_sql.updatedb(con_sql.mydb)
     print('1d_over')
+    con_sql = Updatexag('xag1d_1', 6, 214)
+    con_sql.updatedb(con_sql.mydb)
+    print('1d_1_over')
     con_sql = Updatexag('xag1h', 5, 140)
     con_sql.updatedb(con_sql.mydb)
+    print('1h_over')
+    con_sql = CONNECTSQL('f_ag_15m', 3, 114)
+    con_sql.updatedb(con_sql.mydb)
+    print('15m_over')

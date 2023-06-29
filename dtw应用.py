@@ -25,11 +25,11 @@ class GetData(object):
             database=data_base,  # 数据库
             auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         data = mydb.cursor()
-        # sq = 'select c from ' + table + ' where t between \''+str(d1)+'\' and \''+str(d2)+'\' order by ts'  # +' where ts>1635346800000'
         sql = sql % (table, date1, date2)
         # print(sq)
         data.execute(sql)
-        self.a = np.array(data.fetchall())
+        self.data = np.array(data.fetchall())
+
 
 class Getd(object):
     def __init__(self, table='ag15'):  # 杠杆倍率,表名
@@ -45,50 +45,53 @@ class Getd(object):
         data.execute(get_d)
         self.d_list = (data.fetchall())
 
-def mean2(x):
-    y = np.sum(x) / np.size(x)
-    return y
 
-def corr2(a, b):
-    a = a - mean2(a)
-    b = b - mean2(b)
-    r = (a * b).sum() / math.sqrt((a * a).sum() * (b * b).sum())
-    return r
+def dtw_distance(s1, s2):
+    DTW = {}
+
+    for i in range(len(s1)):
+        DTW[(i, -1)] = float('inf')
+    for i in range(len(s2)):
+        DTW[(-1, i)] = float('inf')
+    DTW[(-1, -1)] = 0
+
+    for i in range(len(s1)):
+        for j in range(len(s2)):
+            dist = (s1[i] - s2[j]) ** 2
+            DTW[(i, j)] = dist + min(DTW[(i - 1, j)], DTW[(i, j - 1)], DTW[(i - 1, j - 1)])
+    # print(DTW)
+    return math.sqrt(DTW[len(s1) - 1, len(s2) - 1])
 
 
 list1 = []
-d1 = '2023-05-22'
-d2 = '2023-06-08'
+d1 = '2023-05-24'
+d2 = '2023-06-28'
 ta = 'xag1d'
-sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
+# sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
 sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
-# sq = 'select c,ma20 from xag1h_ma20'
 
+
+d_list = Getd(ta).d_list
 roll_data = GetData(d1, d2, sq, ta)
-d_list = Getd(ta)
-corr_rate = 0.95
+len1 = len(roll_data.data)
+l1, l2 = [], []
+print(len(d_list) - len1, math.floor(len1 / 2), math.floor(len1 / 2))
+# try:
+for j in range(1000,len(d_list) - len1-11):
+    # for i in range(math.floor(len1 / 2), len1 + math.floor(len1 / 2)):
+    for i in range(len1-5,len1+5):
+        roll_data2 = GetData(list(d_list[j])[0], list(d_list[j + i])[0], sq, ta)
+        roll_data3 = list(map(lambda x: x + (roll_data.data[0][0]-roll_data2.data[0][0]), roll_data2.data))
+        dtw_dist = dtw_distance(roll_data.data, roll_data2.data)
+        # print(d_list[j], d_list[j+i], dtw_dist)
+        l1.append([d_list[j], d_list[j+i]])
+        l2.append(dtw_dist)
+        print(j)
+# except :
+#     print('err')
 
+print(len1, min(l2), l1[l2.index(min(l2))])
+l2.sort()
+print(l2)
 
-try:
-    for i in range(len(d_list.d_list) - len(roll_data.a)):
-        a = roll_data.a
-        b = GetData(list(d_list.d_list[i])[0], list(d_list.d_list[i + len(a) - 1])[0], sq, ta).a
-        d = corr2(a, b)
-        # print(i,d)
-        if d > corr_rate :
-            list1.append([i, d, list(d_list.d_list[i])[0], list(d_list.d_list[i + len(a) - 1])[0]])
-            print(d, list(d_list.d_list[i])[0], list(d_list.d_list[i + len(a) - 1])[0])
-except :
-    print(list(d_list.d_list[i])[0], list(d_list.d_list[i + len(a) - 1])[0],)
-
-print(len(roll_data.a), len(list1))
-
-# Array1 = [[1, 2, 3], [4, 5, 6]]
-# Array2 = [[11, 25, 346], [734, 48, 49]]
-# Mat1 = np.array(Array1)
-# Mat2 = np.array(Array2)
-# correlation = np.corrcoef(Mat1, Mat2)
-# print("矩阵1=\n", Mat1)
-# print("矩阵2=\n", Mat2)
-# print("相关系数矩阵=\n", correlation)
 
