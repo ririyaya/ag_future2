@@ -64,8 +64,8 @@ def dtw_distance(s1, s2):
 
 
 list1 = []
-d1 = '2023-05-24'
-d2 = '2023-06-28'
+d1 = '2023-06-05'
+d2 = '2023-07-05'
 ta = 'xag1d'
 # sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
 sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
@@ -74,24 +74,30 @@ sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o an
 d_list = Getd(ta).d_list
 roll_data = GetData(d1, d2, sq, ta)
 len1 = len(roll_data.data)
+
 l1, l2 = [], []
 print(len(d_list) - len1, math.floor(len1 / 2), math.floor(len1 / 2))
 # try:
-for j in range(1000,len(d_list) - len1-11):
+for j in range(1000, len(d_list) - 2*len1):
     # for i in range(math.floor(len1 / 2), len1 + math.floor(len1 / 2)):
-    for i in range(len1-5,len1+5):
+    for i in range(len1-5, len1+5):
         roll_data2 = GetData(list(d_list[j])[0], list(d_list[j + i])[0], sq, ta)
         roll_data3 = list(map(lambda x: x + (roll_data.data[0][0]-roll_data2.data[0][0]), roll_data2.data))
-        dtw_dist = dtw_distance(roll_data.data, roll_data2.data)
-        # print(d_list[j], d_list[j+i], dtw_dist)
-        l1.append([d_list[j], d_list[j+i]])
-        l2.append(dtw_dist)
-        print(j)
+        # print(d_list[j + i][0],d1,d2)
+        if d_list[j + i][0] == d1:
+            # print(roll_data.data,roll_data2.data)
+            break
+        else:
+            dtw_dist = dtw_distance(roll_data.data, roll_data2.data)
+            # print(d_list[j], d_list[j+i], dtw_dist)
+            # l1.append( d_list[j+i])
+            l2.append([dtw_dist,d_list[j], d_list[j+i]])
+            print(j)
 # except :
 #     print('err')
 
-print(len1, min(l2), l1[l2.index(min(l2))])
-l2.sort()
-print(l2)
+# print(sorted(l1)[-1:])
+
+print(sorted(l2)[:10])
 
 

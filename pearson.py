@@ -57,8 +57,8 @@ def corr2(a, b):
 
 
 list1 = []
-d1 = '2023-05-22'
-d2 = '2023-06-08'
+d1 = '2023-06-05'
+d2 = '2023-07-05'
 ta = 'xag1d'
 sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
 sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
@@ -75,7 +75,7 @@ try:
         b = GetData(list(d_list.d_list[i])[0], list(d_list.d_list[i + len(a) - 1])[0], sq, ta).a
         d = corr2(a, b)
         # print(i,d)
-        if d > corr_rate :
+        if d > corr_rate:
             list1.append([i, d, list(d_list.d_list[i])[0], list(d_list.d_list[i + len(a) - 1])[0]])
             print(d, list(d_list.d_list[i])[0], list(d_list.d_list[i + len(a) - 1])[0])
 except :
