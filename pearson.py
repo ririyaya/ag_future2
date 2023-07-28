@@ -11,6 +11,7 @@ import requests
 import csv
 import codecs
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt  # 重命名为plt
 import datetime
 import pylab
@@ -54,6 +55,11 @@ def corr2(a, b):
     b = b - mean2(b)
     r = (a * b).sum() / math.sqrt((a * a).sum() * (b * b).sum())
     return r
+
+def datelist(d_l1,d_l2):
+    date_l =[datetime.datetime.strftime(x,'%Y-%m-%d') for x in list(pd.date_range(start=d_l1[1][0], end=d_l1[2][0]))]
+    date_l2 = [datetime.datetime.strftime(x, '%Y-%m-%d') for x in list(pd.date_range(start=d_l2[1][0], end=d_l2[2][0]))]
+    return len(set(date_l) & set(date_l2)),(len(set(date_l) | set(date_l2)))
 
 
 list1 = []
