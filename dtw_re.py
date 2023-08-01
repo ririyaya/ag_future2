@@ -71,7 +71,7 @@ def get_close_ratio(date1, table='xag1d', data_base='koudai'):
         database=data_base,  # 数据库
         auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
     data = mydb.cursor()
-    sql = 'select distinct (o-c)/c from %s where t=\'%s\'' % (table, d_list[d_list.index(date1) + 1])
+    sql = 'select distinct  (c-o)/o from %s where t=\'%s\'' % (table, d_list[d_list.index(date1) + 1])
     # print(sq)
     data.execute(sql)
     return data.fetchall()
