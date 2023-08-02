@@ -90,8 +90,8 @@ def data_len_compare(d_l1, d_l2):
         return True
 
 
-d1 = '2023-06-20'
-d2 = '2023-07-31'
+d1 = '2023-06-21'
+d2 = '2023-07-11'
 ta = 'xag1d'
 # sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
 sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
@@ -130,14 +130,18 @@ for i in range(len(unclean_dtw_list)):
 
 # print(l3)
 
-next_d_ratio = 0
+next_d_ratio = []
 for i in range(len(result_list)):
     if result_list[i][0] <= 2:
-        next_d_ratio += get_close_ratio(result_list[i][2])[0][0]
+        next_d_ratio.append(get_close_ratio(result_list[i][2])[0][0])
 
-dtw_avg_next_d = next_d_ratio / len(result_list)
+dtw_ratio=0
+print(len(next_d_ratio))
+for i in range(len(next_d_ratio)):
+    dtw_ratio+=next_d_ratio[i]
+dtw_avg_next_d = dtw_ratio / len(next_d_ratio)
 next_ratio = get_close_ratio(d2)
-ratio_com= (d2, next_ratio, dtw_avg_next_d)
+ratio_com= (d2, next_ratio, 78)
 print(ratio_com)
 
 # if os.path.exists(r"d:\2.txt"):
