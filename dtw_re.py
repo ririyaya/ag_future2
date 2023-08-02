@@ -129,7 +129,7 @@ for k in range(1350, len(d_list) - 19, 2):
         if result_list[i][0] <= 2:
             next_d_ratio += get_close_ratio(result_list[i][2])[0][0]
 
-    dtw_avg_next_d = next_d_ratio / len(result_list)
+    dtw_avg_next_d = next_d_ratio / len(roll_data)
     next_ratio = get_close_ratio(d2)
     ratio_com.append([d2, next_ratio, dtw_avg_next_d])
     print(k, ratio_com)

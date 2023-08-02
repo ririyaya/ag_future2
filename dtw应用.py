@@ -84,15 +84,15 @@ def data_len_compare(d_l1, d_l2):
     # date_l2 = [datetime.datetime.strftime(x, '%Y-%m-%d') for x in list(pd.date_range(start=d_l2[1], end=d_l2[2]))]
     date_l1 = [x for x in d_list[d_list.index(d_l1[1]):d_list.index(d_l1[2]) + 1]]
     date_l2 = [x for x in d_list[d_list.index(d_l2[1]):d_list.index(d_l2[2]) + 1]]
-    if len(set(date_l1) & set(date_l2)) >= len1 / 10:
+    if len(set(date_l1) & set(date_l2)) >= len1 / 5:
         return False
     else:
         return True
 
 
-d1 = '2023-06-21'
-d2 = '2023-07-11'
-ta = 'xag1d'
+d1 = '2023-06-19'
+d2 = '2023-08-01'
+ta = 'xag_1d_v_ratio'
 # sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
 sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
 
@@ -103,7 +103,8 @@ len1 = len(roll_data.data)
 unclean_dtw_list = []
 
 for j in range(1, len(d_list) - 2 * len1):
-    for i in range(len1 - 2, len1 + 2):
+    print(j)
+    for i in range(len1 - 5, len1 + 5):
         roll_data2 = GetData((d_list[j]), (d_list[j + i]), sq, ta)
         # roll_data3 = list(map(lambda x: x + (roll_data.data[0][0] - roll_data2.data[0][0]), roll_data2.data))
         if d_list[j + i] == d1:
@@ -128,7 +129,7 @@ for i in range(len(unclean_dtw_list)):
             # print(i,j)
     result_list, tmp_list = tmp_list, []
 
-# print(l3)
+print(result_list)
 
 next_d_ratio = []
 for i in range(len(result_list)):
@@ -140,8 +141,8 @@ print(len(next_d_ratio))
 for i in range(len(next_d_ratio)):
     dtw_ratio+=next_d_ratio[i]
 dtw_avg_next_d = dtw_ratio / len(next_d_ratio)
-next_ratio = get_close_ratio(d2)
-ratio_com= (d2, next_ratio, 78)
+next_ratio = get_close_ratio(d2)[0][0]
+ratio_com= (d2, round(next_ratio, 4)*100, round(dtw_avg_next_d, 4)*100)
 print(ratio_com)
 
 # if os.path.exists(r"d:\2.txt"):
