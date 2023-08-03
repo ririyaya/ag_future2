@@ -76,7 +76,7 @@ def get_close_ratio(date1, table='xag1d', data_base='koudai'):
     sql = 'select distinct  (c-o)/o from %s where t=\'%s\'' % (table, d_list[d_list.index(date1) + 1])
     # print(sq)
     data.execute(sql)
-    return data.fetchall()
+    return round(data.fetchall()[0][0],4)*100
 
 
 def data_len_compare(d_l1, d_l2):
@@ -96,11 +96,15 @@ ta = 'xag_1d_v_ratio'
 # sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
 sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
 
+
+
 # d_list = Getd(ta).d_list
 d_list = list(map(lambda x: x[0], Getd(ta).d_list))
 roll_data = GetData(d1, d2, sq, ta)
 len1 = len(roll_data.data)
 unclean_dtw_list = []
+
+print(get_close_ratio(d2,ta))
 
 for j in range(1, len(d_list) - 2 * len1):
     print(j)
@@ -129,20 +133,24 @@ for i in range(len(unclean_dtw_list)):
             # print(i,j)
     result_list, tmp_list = tmp_list, []
 
-print(result_list)
+
 
 next_d_ratio = []
 for i in range(len(result_list)):
+    result_list[i].append(get_close_ratio(result_list[i][2], ta))
     if result_list[i][0] <= 2:
-        next_d_ratio.append(get_close_ratio(result_list[i][2])[0][0])
+        next_d_ratio.append(get_close_ratio(result_list[i][2],ta))
+
+
+print(result_list)
 
 dtw_ratio=0
 print(len(next_d_ratio))
 for i in range(len(next_d_ratio)):
     dtw_ratio+=next_d_ratio[i]
 dtw_avg_next_d = dtw_ratio / len(next_d_ratio)
-next_ratio = get_close_ratio(d2)[0][0]
-ratio_com= (d2, round(next_ratio, 4)*100, round(dtw_avg_next_d, 4)*100)
+next_ratio = get_close_ratio(d2,ta)
+ratio_com= (d2, next_ratio, dtw_avg_next_d)
 print(ratio_com)
 
 # if os.path.exists(r"d:\2.txt"):
