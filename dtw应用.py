@@ -30,7 +30,7 @@ class GetData(object):
         # print(sq)
         data.execute(sql)
         tmp = np.array(data.fetchall())
-        self.data = list(map(lambda x: x[0] - tmp[0][0], tmp))
+        self.data = list(map(lambda x: x[0] - tmp[0][0], tmp))  #
 
 
 class Getd(object):
@@ -43,7 +43,8 @@ class Getd(object):
             auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         data = mydb.cursor()
         # sq = 'select o,c from ' + table + ' where t between str(d1) and str(d2) order by ts'  # +' where ts>1635346800000'
-        get_d = 'select t from (select distinct t,ts from ' + table + ' where c<>o and h<>l and c<>h)t  order by ts'
+        get_d = 'select t from (select distinct t,ts from ' + table + ' where c<>o and h<>l and c<>h)t ' \
+                                                                      'where (t between \'2021-09-01\' and \'2021-11-01\' or t >=\'2023-05-01\')  order by ts'
         data.execute(get_d)
         self.d_list = (data.fetchall())
 
@@ -84,7 +85,7 @@ def data_len_compare(d_l1, d_l2):
     # date_l2 = [datetime.datetime.strftime(x, '%Y-%m-%d') for x in list(pd.date_range(start=d_l2[1], end=d_l2[2]))]
     date_l1 = [x for x in d_list[d_list.index(d_l1[1]):d_list.index(d_l1[2]) + 1]]
     date_l2 = [x for x in d_list[d_list.index(d_l2[1]):d_list.index(d_l2[2]) + 1]]
-    if len(set(date_l1) & set(date_l2)) >= len1 / 5:
+    if len(set(date_l1) & set(date_l2)) >= len1 / 4:
         return False
     else:
         return True
@@ -94,7 +95,8 @@ d1 = '2023-06-19'
 d2 = '2023-08-01'
 ta = 'xag_1d_v_ratio'
 # sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
-sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
+sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' ' \
+     'and (t between \'2021-09-01\' and \'2021-11-01\' or t >=\'2023-05-01\') order by ts'
 
 
 

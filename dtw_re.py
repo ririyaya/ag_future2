@@ -74,7 +74,7 @@ def get_close_ratio(date1, table='xag1d', data_base='koudai'):
     sql = 'select distinct  (c-o)/o from %s where t=\'%s\'' % (table, d_list[d_list.index(date1) + 1])
     # print(sq)
     data.execute(sql)
-    return data.fetchall()
+    return round(data.fetchall()[0][0], 4)*100
 
 
 def data_len_compare(d_l1, d_l2, len1):
@@ -126,8 +126,9 @@ for k in range(1350, len(d_list) - 19, 2):
 
     next_d_ratio = 0
     for i in range(len(result_list)):
+        result_list[i].append(get_close_ratio(result_list[i][2]))
         if result_list[i][0] <= 2:
-            next_d_ratio += get_close_ratio(result_list[i][2])[0][0]
+            next_d_ratio += get_close_ratio(result_list[i][2])
 
     dtw_avg_next_d = next_d_ratio / len(roll_data)
     next_ratio = get_close_ratio(d2)
@@ -135,3 +136,4 @@ for k in range(1350, len(d_list) - 19, 2):
     print(k, ratio_com)
 
 print(ratio_com)
+
