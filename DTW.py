@@ -18,6 +18,8 @@ ts1=[1,3,1,3,5,6]
 ts2=[4,2,3,6,3]
 
 def DTWDistance(s1, s2):
+    s1.reverse()
+    s2.reverse()
     DTW = {}
 
     for i in range(len(s1)):

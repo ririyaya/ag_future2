@@ -30,7 +30,7 @@ class GetData(object):
         # print(sq)
         data.execute(sql)
         tmp = np.array(data.fetchall())
-        self.data = list(map(lambda x: x[0] - tmp[0][0], tmp))  #
+        self.data = list(map(lambda x: x[0] , tmp))  #- tmp[0][0]
 
 
 class Getd(object):
@@ -44,13 +44,15 @@ class Getd(object):
         data = mydb.cursor()
         # sq = 'select o,c from ' + table + ' where t between str(d1) and str(d2) order by ts'  # +' where ts>1635346800000'
         get_d = 'select t from (select distinct t,ts from ' + table + ' where c<>o and h<>l and c<>h)t ' \
-                                                                      'where (t between \'2021-09-01\' and \'2021-11-01\' or t >=\'2023-05-01\')  order by ts'
+                  'order by ts'   # 'where (t between \'2021-09-01\' and \'2021-11-01\' or t >=\'2023-05-01\')  order by ts'
         data.execute(get_d)
         self.d_list = (data.fetchall())
 
 
 def dtw_distance(s1, s2):
     DTW = {}
+    s1.reverse()
+    s2.reverse()
 
     for i in range(len(s1)):
         DTW[(i, -1)] = float('inf')
@@ -77,7 +79,7 @@ def get_close_ratio(date1, table='xag1d', data_base='koudai'):
     sql = 'select distinct  (c-o)/o from %s where t=\'%s\'' % (table, d_list[d_list.index(date1) + 1])
     # print(sq)
     data.execute(sql)
-    return round(data.fetchall()[0][0],4)*100
+    return round(data.fetchall()[0][0], 4)*100
 
 
 def data_len_compare(d_l1, d_l2):
@@ -85,29 +87,31 @@ def data_len_compare(d_l1, d_l2):
     # date_l2 = [datetime.datetime.strftime(x, '%Y-%m-%d') for x in list(pd.date_range(start=d_l2[1], end=d_l2[2]))]
     date_l1 = [x for x in d_list[d_list.index(d_l1[1]):d_list.index(d_l1[2]) + 1]]
     date_l2 = [x for x in d_list[d_list.index(d_l2[1]):d_list.index(d_l2[2]) + 1]]
-    if len(set(date_l1) & set(date_l2)) >= len1 / 4:
+    if len(set(date_l1) & set(date_l2)) >= len1 / 2:
         return False
     else:
         return True
 
 
 d1 = '2023-06-19'
-d2 = '2023-08-01'
+d2 = '2023-08-02'
 ta = 'xag_1d_v_ratio'
 # sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
-sq = 'select c from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' ' \
-     'and (t between \'2021-09-01\' and \'2021-11-01\' or t >=\'2023-05-01\') order by ts'
+sq = 'select c from (select distinct * from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' ' \
+     ' order by ts'
 
 
 
 # d_list = Getd(ta).d_list
 d_list = list(map(lambda x: x[0], Getd(ta).d_list))
+d1=d=d_list[d_list.index(d2)-19]
 roll_data = GetData(d1, d2, sq, ta)
 len1 = len(roll_data.data)
 unclean_dtw_list = []
 
 print(get_close_ratio(d2,ta))
 
+# 数据循环起点
 for j in range(1, len(d_list) - 2 * len1):
     print(j)
     for i in range(len1 - 5, len1 + 5):
