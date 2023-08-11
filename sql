@@ -1,4 +1,3 @@
--- koudai.xag1h_ma20_ratio source
 
 create or replace
 algorithm = UNDEFINED view `koudai`.`xag1h_ma20_ratio` as
