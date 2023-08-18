@@ -33,12 +33,13 @@ class CONNECTSQL(object):
         self.d.execute(get_sq)
         self.lasttime = 1333566880000 - 1
         # print((self.d.fetchall()))
-        self.lasttime = int((self.d.fetchall())[0][0])
+        self.lasttime = int((self.d.fetchall())[0][0]) # 注释以更新全量数据
         self.type=type
         self.count = count
 
-     # type1, 2, 3,  4,  5:
-    def get(self,count, tm):  # 1m,5m,15m,30m,60m     8:1d                    qid: 6 agtd,  13 xag, 704 ag连续
+
+    # type1, 2, 3,  4,  5:
+    def get(self,count, tm):  # 1m,5m,15m,30m,60m     8:1d                    qid: 6 agtd,  13 xag, 704  ,300 离岸人民币
         url = "https://official.gkoudai.com/officialNetworkApi/CandleStickV2?qid=704&type=" + str(
             self.type) + "&count=" + str(count) + "&ts=" + str(tm)
         header = {'epid': 'a6c89023-9472-4f30-81cf-8c7dea62aae5'}
@@ -143,6 +144,22 @@ class Updatexag(CONNECTSQL):
         return li, ts
 
 
+class UpdateUSDRMB(CONNECTSQL):
+
+    # type1, 2, 3,  4,  5:
+    def get(self, count, tm):  # 1m,5m,15m,30m,60m qid: 6 agtd, 13 xag, 704 连续
+        url = "https://official.gkoudai.com/officialNetworkApi/CandleStickV2?qid=300&type=" + str(
+            self.type) + "&count=" + str(
+            count) + "&ts=" + str(tm)
+        header = {'epid': 'a6c89023-9472-4f30-81cf-8c7dea62aae5'}
+        r = requests.post(url, headers=header)
+        candle = json.loads(r.text)['data']['candle']
+        li = []
+        for i in range(0, len(candle)):
+            li.append(tuple(candle[i].values()))
+        # print(len(li))
+        ts = li[0][7]  # 倒叙最新
+        return li, ts
 
 
 if __name__ == '__main__':
@@ -159,3 +176,7 @@ if __name__ == '__main__':
     con_sql = CONNECTSQL('f_ag_15m', 3, 114)
     con_sql.updatedb(con_sql.mydb)
     print('15m_over')
+
+    con_sql = UpdateUSDRMB('usd_rmb', 5, 120)
+    con_sql.updatedb(con_sql.mydb)
+    print('usd_rmb_over')
