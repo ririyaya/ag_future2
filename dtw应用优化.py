@@ -18,7 +18,7 @@ import pylab
 
 # bitXor(toUInt32(uid),0xF55CA353)
 class GetData(object):
-    def __init__(self, date1, date2, sql, table='xag1d_1', data_base='koudai'):  # 杠杆倍率,表名
+    def __init__(self, sql, table='xag1d_1', data_base='koudai'):  # 杠杆倍率,表名
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -26,11 +26,11 @@ class GetData(object):
             database=data_base,  # 数据库
             auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         data = mydb.cursor()
-        sql = sql % (table, date1, date2)
+        sql = sql % (table)
         # print(sq)
         data.execute(sql)
-        tmp = np.array(data.fetchall())
-        self.data = list(map(lambda x: x[0] , tmp))  #- tmp[0][0]
+        self.nparr = np.array(data.fetchall())
+        # self.data = list(map(lambda x: x[0] , tmp))  #- tmp[0][0]
 
 
 class Getd(object):
@@ -42,15 +42,16 @@ class Getd(object):
             database='koudai',  # 数据库
             auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         data = mydb.cursor()
-        # sq = 'select o,c from ' + table + ' where t between str(d1) and str(d2) order by ts'  # +' where ts>1635346800000'
-        get_d = 'select t from (select distinct t,ts from ' + table + ' where c<>o and h<>l and c<>h)t ' \
-                  'order by ts'   # 'where (t between \'2021-09-01\' and \'2021-11-01\' or t >=\'2023-05-01\')  order by ts'
+        get_d = 'select  (from_unixtime(ts/1000)) from (select distinct t,ts from ' + table + ' where c<>o and h<>l and c<>h)t ' \
+                  'order by ts'
         data.execute(get_d)
         self.d_list = (data.fetchall())
 
 
 def dtw_distance(s1, s2):
     DTW = {}
+    s1=list(map(lambda x: float(x), s1))
+    s2=list(map(lambda x: float(x), s2))
     s1.reverse()
     s2.reverse()
 
@@ -76,7 +77,7 @@ def get_close_ratio(date1, table='xag1d', data_base='koudai'):
         database=data_base,  # 数据库
         auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
     data = mydb.cursor()
-    sql = 'select distinct  (c-o)/o from %s where t=\'%s\'' % (table, d_list[d_list.index(date1) + 1])
+    sql = 'select distinct  (c-o)/o from %s where ts=unix_timestamp(\'%s\')*1000' % (table, d_list[d_list.index(date1) + 1])
     # print(sq)
     data.execute(sql)
     return round(data.fetchall()[0][0], 4)*100
@@ -93,45 +94,39 @@ def data_len_compare(d_l1, d_l2):
         return True
 
 
-d1 = '2023-06-19'
-d2 = '2023-08-02'
-ta = 'xag_1d_v_ratio'
-# sq = 'select  round((c-o)/o*100,3) r2 from (select distinct o,c,h,l,t,ts,v from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' order by ts'
-sq = 'select c from (select distinct * from koudai.%s where c<>o and h<>l and c<>h)dis_t where t >=\'%s\' and t<=\'%s\' ' \
-     ' order by ts'
+d1 = '2023-08-21 13:00'
+d2 = '2023-08-22 13:00'
+ta = 'xag1h_ma20'
+sq = 'select dt,c,o,ma20,round((c-ma20)/ma20*100,3) from koudai.%s   order by ts  '
 
-
-
-# d_list = Getd(ta).d_list
-d_list = list(map(lambda x: x[0], Getd(ta).d_list))
-d1=d_list[d_list.index(d2)-19]
-roll_data = GetData(d1, d2, sq, ta)
-len1 = len(roll_data.data)
+all_data = GetData(sq, ta)
+d_list = list(map(lambda x: x[0], all_data.nparr))
+# d_list = list(map(lambda x: str(x[0]), Getd(ta).d_list))
+len1 = d_list.index(d2)-d_list.index(d1)
 unclean_dtw_list = []
 
-print(get_close_ratio(d2,ta))
-
+# print(all_data.nparr[d_list.index(d2)+1, 1])
+roll_data1 = all_data.nparr[d_list.index(d1):d_list.index(d2), 4].tolist()
 # 数据循环起点
-for j in range(1, len(d_list) - 2 * len1):
-    print(j)
-    for i in range(len1 - 5, len1 + 5):
-        roll_data2 = GetData((d_list[j]), (d_list[j + i]), sq, ta)
-        # roll_data3 = list(map(lambda x: x + (roll_data.data[0][0] - roll_data2.data[0][0]), roll_data2.data))
+for j in range(28998, len(d_list) - 2 * len1):
+    # print(j)
+    for i in range(len1 - 1, len1 + 0):
+        roll_data2 = all_data.nparr[j+i:j+i+len1, 4].tolist()
         if d_list[j + i] == d1:
             break
         else:
-            dtw_dist = dtw_distance(roll_data.data, roll_data2.data)
+            dtw_dist = dtw_distance(roll_data1, roll_data2)
             unclean_dtw_list.append([dtw_dist, d_list[j], d_list[j + i]])
 
 unclean_dtw_list.sort()
 tmp_list = []
 result_list = unclean_dtw_list
 
+
 for i in range(len(unclean_dtw_list)):
-    # print(i)
+    print(i)
     if i >= len(result_list):
         break
-    # print(l4)
     tmp_list = result_list[0:i + 1]
     for j in range(i, len(result_list)):
         if data_len_compare(result_list[i], result_list[j]) is True:
@@ -142,12 +137,14 @@ for i in range(len(unclean_dtw_list)):
 
 
 next_d_ratio = []
+# d_list.index(result_list[i][2])
 for i in range(len(result_list)):
-    result_list[i].append(get_close_ratio(result_list[i][2], ta))
+    print(float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist())-float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist())
+          )
+    result_list[i].append(round( (float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist()) -float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist()) )/ float(all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist())*100, 2) )
+
     if result_list[i][0] <= 2:
-        next_d_ratio.append(get_close_ratio(result_list[i][2],ta))
-
-
+        next_d_ratio.append(round( (float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist()) -float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist()) )/ float(all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist())*100, 2) )
 print(result_list)
 
 dtw_ratio=0
