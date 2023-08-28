@@ -16,6 +16,7 @@ import matplotlib.pyplot as plt  # 重命名为plt
 import datetime
 import pylab
 
+##https://blog.csdn.net/chenxy_bwave/article/details/121052541
 # bitXor(toUInt32(uid),0xF55CA353)
 class GetData(object):
     def __init__(self, sql, table='xag1d_1', data_base='koudai'):  # 杠杆倍率,表名
@@ -94,8 +95,8 @@ def data_len_compare(d_l1, d_l2):
         return True
 
 
-d1 = '2023-08-21 13:00'
-d2 = '2023-08-22 13:00'
+d1 = '2023-08-24 13:00'
+d2 = '2023-08-25 13:00'
 ta = 'xag1h_ma20'
 sq = 'select dt,c,o,ma20,round((c-ma20)/ma20*100,3) from koudai.%s   order by ts  '
 
@@ -103,48 +104,43 @@ all_data = GetData(sq, ta)
 d_list = list(map(lambda x: x[0], all_data.nparr))
 # d_list = list(map(lambda x: str(x[0]), Getd(ta).d_list))
 len1 = d_list.index(d2)-d_list.index(d1)
-unclean_dtw_list = []
+unclean_dtw_list = [[0.0,d1,d2]]
 
 # print(all_data.nparr[d_list.index(d2)+1, 1])
 roll_data1 = all_data.nparr[d_list.index(d1):d_list.index(d2), 4].tolist()
 # 数据循环起点
-for j in range(28998, len(d_list) - 2 * len1):
+print(time.time(), '开始运行')
+for j in range(10000, len(d_list) - 2 * len1):
     # print(j)
     for i in range(len1 - 1, len1 + 0):
         roll_data2 = all_data.nparr[j+i:j+i+len1, 4].tolist()
-        if d_list[j + i] == d1:
-            break
-        else:
-            dtw_dist = dtw_distance(roll_data1, roll_data2)
-            unclean_dtw_list.append([dtw_dist, d_list[j], d_list[j + i]])
+        # if d_list[j + i] == d1:
+        #     break
+        # else:
+        dtw_dist = dtw_distance(roll_data1, roll_data2)
+        lll=[([dtw_dist,d_list[j+i],d_list[j+i+len1]] )]
+        if data_len_compare(unclean_dtw_list[-1], [dtw_dist,d_list[j+i],d_list[j+i+len1]]) is False and unclean_dtw_list[-1][0]>dtw_dist:
+            unclean_dtw_list.pop()
+            unclean_dtw_list.append([dtw_dist,d_list[j+i],d_list[j+i+len1]])
+        elif data_len_compare(unclean_dtw_list[-1], [dtw_dist,d_list[j+i],d_list[j+i+len1]]) is True:
+            unclean_dtw_list.append([dtw_dist,d_list[j+i],d_list[j+i+len1]])
+        # else:
+            # print(lll)
+        # unclean_dtw_list.sort()
 
-unclean_dtw_list.sort()
-tmp_list = []
-result_list = unclean_dtw_list
+print(time.time(),'长度清洗完成')
 
-
-for i in range(len(unclean_dtw_list)):
-    print(i)
-    if i >= len(result_list):
-        break
-    tmp_list = result_list[0:i + 1]
-    for j in range(i, len(result_list)):
-        if data_len_compare(result_list[i], result_list[j]) is True:
-            tmp_list.append(result_list[j])
-            # print(i,j)
-    result_list, tmp_list = tmp_list, []
-
-
-
+result_list = sorted(unclean_dtw_list[2:])
 next_d_ratio = []
 # d_list.index(result_list[i][2])
 for i in range(len(result_list)):
-    print(float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist())-float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist())
-          )
     result_list[i].append(round( (float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist()) -float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist()) )/ float(all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist())*100, 2) )
 
     if result_list[i][0] <= 2:
         next_d_ratio.append(round( (float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist()) -float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist()) )/ float(all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist())*100, 2) )
+
+print(time.time(),'收益计算完成')
+
 print(result_list)
 
 dtw_ratio=0
