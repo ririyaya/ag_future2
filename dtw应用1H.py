@@ -16,7 +16,6 @@ import matplotlib.pyplot as plt  # 重命名为plt
 import datetime
 import pylab
 
-# bitXor(toUInt32(uid),0xF55CA353)
 class GetData(object):
     def __init__(self, date1, date2, sql, table='xag1d_1', data_base='koudai'):  # 杠杆倍率,表名
         mydb = mysql.connector.connect(
