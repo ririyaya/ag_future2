@@ -30,8 +30,7 @@ class GetAndDraw(object):
             database=data_base,  # 数据库
             auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         data = mydb.cursor()
-        sql = "select c,dt from %s " \
-              "where dt between '%s' and '%s'" % (table, dt1, dt2)
+        sql = "select c,ma20,dt from %s where dt between '%s' and '%s'" % (table, dt1, dt2)
         # print(sq)
         data.execute(sql)
         self.tmp = np.array(data.fetchall())
@@ -39,7 +38,13 @@ class GetAndDraw(object):
         fig = make_subplots(specs=[[{"secondary_y": True}]])
         # fig = go.Figure()
         # Add traces
-        fig.add_trace(go.Scatter(x=np.arange(0, len(self.tmp[:, 0])).tolist(), y=list(map(lambda x: float(x), self.tmp[:, 0])), mode='lines', name='c'), secondary_y=False)
+        fig.add_trace(
+            go.Scatter(x=np.arange(0, len(self.tmp[:, 0])).tolist(), y=list(map(lambda x: float(x), self.tmp[:, 0])),
+                       mode='lines', name='c'), secondary_y=False)
+        fig.add_trace(
+            go.Scatter(x=np.arange(0, len(self.tmp[:, 1])).tolist(), y=list(map(lambda x: float(x), self.tmp[:, 1])),
+                       mode='lines', name='ma'), secondary_y=False)
+
         # fig.add_trace(go.Scatter(x=da.tmp[:, 1], y=da.tmp[:, 2], mode='lines', name='series', fill="tozeroy", xaxis='x',
         #                          yaxis='y2'), secondary_y=True)
         # fig.add_trace(go.Bar(x=da.tmp[:, 1], y=da.tmp[:, 6], name='ratio', xaxis='x', yaxis='y2',
@@ -48,6 +53,15 @@ class GetAndDraw(object):
 
 
         # self.data = list(map(lambda x: x[0], self.tmp))
+
+def pltdraw(data,d1,d2):
+    y = list(map(lambda x: float(x), data[:, 0]))
+    y2= list(map(lambda x: float(x), data[:, 1]))
+    x = np.arange(0, len(data[:, 0])).tolist()
+    plt.title(str(d1+'~'+d2))
+    plt.plot(x, y, '-', x, y2, '-r')  # '-r'表示用红线画出
+    plt.show()
+    # print('--------------------------------------')
 
 
 

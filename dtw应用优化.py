@@ -28,7 +28,7 @@ class GetData(object):
             database=data_base,  # 数据库
             auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
         data = mydb.cursor()
-        sql = sql % (table)
+        sql = sql
         # print(sq)
         data.execute(sql)
         self.nparr = np.array(data.fetchall())
@@ -95,66 +95,74 @@ def data_len_compare(d_l1, d_l2):
     else:
         return 1
 
-print(time.time(), '开始运行')
+if __name__ == '__main__':
+    print(time.time(), '开始运行')
 
-d1 = '2023-08-30 18:00'
-d2 = '2023-09-01 09:00'
-ta = 'xag1h_ma20'
-sq = 'select dt,c,o,ma20,round((c-ma20)/ma20*100,3) from koudai.%s   order by ts  '
+    d1 = '2023-09-01 15:00'
+    d2 = '2023-09-02 04:00'
+    ta = 'xag1h_ma20'
+    sq = 'select dt,c,o,ma20,round((c-ma20)/ma20*100,3) from koudai.%s   order by ts  ' % ta
 
-all_data = GetData(sq, ta)
-d_list = list(map(lambda x: x[0], all_data.nparr))
-# d_list = list(map(lambda x: str(x[0]), Getd(ta).d_list))
-len1 = d_list.index(d2)-d_list.index(d1)
-unclean_dtw_list = [[0.0,d1,d2]]
+    plotly绘图.GetAndDraw(d1,d2,ta)
 
-# print(all_data.nparr[d_list.index(d2)+1, 1])
-roll_data1 = all_data.nparr[d_list.index(d1):d_list.index(d2), 4].tolist()
-# 数据循环起点
-print(time.time(), '数据读取完成')
-for j in range(20000, len(d_list) - 2 * len1):
-    print(j)
-    for i in range(len1 - 3, len1 + 2):
-        if d_list[j + i+len1] == d_list[-1]:
-            break
-        else:
-            roll_data2 = all_data.nparr[j+i:j+i+len1, 4].tolist()
-            dtw_dist = dtw_distance(roll_data1, roll_data2)
-            tmp_list=[dtw_dist,d_list[j+i],d_list[j+i+len1]]
-            flag_lan_compare = data_len_compare(unclean_dtw_list[-1], tmp_list)
-            if flag_lan_compare == 0 and unclean_dtw_list[-1][0]>dtw_dist:
-                unclean_dtw_list.pop()
-                unclean_dtw_list.append(tmp_list)
-            elif flag_lan_compare == 1:
-                unclean_dtw_list.append(tmp_list)
-            # else:
-                # print(lll)
-            # unclean_dtw_list.sort()
+    all_data = GetData(sq, ta)
+    d_list = list(map(lambda x: x[0], all_data.nparr))
+    # d_list = list(map(lambda x: str(x[0]), Getd(ta).d_list))
+    len1 = d_list.index(d2)-d_list.index(d1)
+    unclean_dtw_list = [[0.0,d1,d2]]
 
-print(time.time(), 'dtw计算完成')
+    # print(all_data.nparr[d_list.index(d2)+1, 1])
+    roll_data1 = all_data.nparr[d_list.index(d1):d_list.index(d2), 4].tolist()
+    # 数据循环起点
+    print(time.time(), '数据读取完成')
+    for j in range(100, len(d_list) - 2 * len1):
+        print(j)
+        for i in range(len1 - 3, len1 + 2):
+            if d_list[j + i+len1] == d_list[-1]:
+                break
+            else:
+                roll_data2 = all_data.nparr[j+i:j+i+len1, 4].tolist()
+                dtw_dist = dtw_distance(roll_data1, roll_data2)
+                tmp_list=[dtw_dist,d_list[j+i],d_list[j+i+len1]]
+                flag_lan_compare = data_len_compare(unclean_dtw_list[-1], tmp_list)
+                if flag_lan_compare == 0 and unclean_dtw_list[-1][0]>dtw_dist:
+                    unclean_dtw_list.pop()
+                    unclean_dtw_list.append(tmp_list)
+                elif flag_lan_compare == 1:
+                    unclean_dtw_list.append(tmp_list)
+                # else:
+                    # print(lll)
+                # unclean_dtw_list.sort()
 
-result_list = sorted(unclean_dtw_list)[2:]
-next_d_ratio = []
-# d_list.index(result_list[i][2])
-for i in range(len(result_list)):
-    o=all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist()
-    c=all_data.nparr[d_list.index(result_list[i][2])+1, 1].tolist()
-    result_list[i].append(round( (float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist()) -float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist()) )/ float(all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist())*100, 2))
+    print(time.time(), 'dtw计算完成')
 
-    if result_list[i][0] <= 2:
-        next_d_ratio.append(round( (float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist()) -float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist()) )/ float(all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist())*100, 2) )
+    result_list = sorted(unclean_dtw_list)[2:]
+    next_d_ratio = []
+    # d_list.index(result_list[i][2])
+    for i in range(len(result_list)):
+        o=all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist()
+        c=all_data.nparr[d_list.index(result_list[i][2])+1, 1].tolist()
+        result_list[i].append(round( (float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist()) -float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist()) )/ float(all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist())*100, 2))
 
-print(time.time(), '收益计算完成')
-print(result_list)
+        if result_list[i][0] <= 2:
+            next_d_ratio.append(round( (float(all_data.nparr[d_list.index(result_list[i][2]) +1, 1].tolist()) -float(all_data.nparr[d_list.index(result_list[i][2]) +1, 2].tolist()) )/ float(all_data.nparr[d_list.index(result_list[i][2])+1, 2].tolist())*100, 2) )
 
-dtw_ratio=0
-print(len(next_d_ratio))
-for i in range(len(next_d_ratio)):
-    dtw_ratio+=next_d_ratio[i]
-dtw_avg_next_d = dtw_ratio / len(next_d_ratio)
-next_ratio = get_close_ratio(d2,ta)
-ratio_com = (d2, next_ratio, dtw_avg_next_d)
-print(ratio_com)
+    print(time.time(), '收益计算完成')
+    print(result_list)
+
+    dtw_ratio=0
+    print(len(next_d_ratio))
+    for i in range(len(next_d_ratio)):
+        dtw_ratio+=next_d_ratio[i]
+    dtw_avg_next_d = dtw_ratio / len(next_d_ratio)
+    next_ratio = get_close_ratio(d2,ta)
+    ratio_com = (d2, next_ratio, dtw_avg_next_d)
+    print(ratio_com)
+
+    for i in result_list:
+        print(i[0])
+        sql= "select c,ma20,dt from %s where dt between '%s' and '%s'" % (ta, i[1], i[2])
+        plotly绘图.pltdraw(GetData(sql).nparr, i[1], i[2])
 
 # if os.path.exists(r"d:\2.txt"):
 #     os.remove(r"d:\2.txt")
