@@ -55,12 +55,12 @@ while True:
     del candle_now['a']
     del candle_now['t']
     del candle_now['ts']
-    if float(candle[-1]['o']) > ma_o_price and float(candle[-1]['c']) < ma_o_price :
+    if float(candle[-1]['o']) > ma_o_price and float(candle[-1]['c']) <= (ma_o_price*0.99) :
         send_mail.mail(str(time.strftime("%Y-%m-%d %H:%M:%S"))+"\n"+str(candle_now)+"\n"+str(ma_o_price),"多头机会")
-    elif float(candle[-1]['o'] )< ma_o_price and float(candle[-1]['c']) > ma_o_price :
+    elif float(candle[-1]['o'] )< ma_o_price and float(candle[-1]['c']) >= (ma_o_price*1.01) :
         send_mail.mail(str(time.strftime("%Y-%m-%d %H:%M:%S"))+"\n"+str(candle_now)+"\n"+str(ma_o_price),"空头机会")
     # print(li)
-    time.sleep(60)
+    time.sleep(600)
 
 
 # {'a': '0.0', 'c': '23.1550', 't': '11-15 12:00', 'v': '3314.0', 'h': '23.2300', 'l': '23.1225', 'o': '23.1475', 'ts': 1700020800000}

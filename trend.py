@@ -251,7 +251,7 @@ class MIN1:
 
 # 16均线 15延迟
 class Xag():
-    def __init__(self, leve, ma_range, table='xag1h', start_i=2):  # 杠杆倍率,表名
+    def __init__(self, lever, ma_range, table='xag1h', start_i=2):  # 杠杆倍率,表名
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
@@ -271,7 +271,7 @@ class Xag():
             self.o.append(round(a[i][4], 5))
             self.ma.append(float(round(a[i][5], 5)))
         self.start_i = start_i
-        self.__leve = leve
+        self.__lever = lever  # 杠杆倍率
 
     # main bei扩展倍数 xie比较斜率 late延迟开仓k
     def ot(self, bei, slope, ma_range, late_start, late, o, h, l, ts, c1,ma):  # 主策略
@@ -308,7 +308,7 @@ class Xag():
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#偏离值过4%损
                     # sc=float(o[i])
                     e = ((Dec(str(e)) + Dec(str(so)) - Dec(str(sc)))*100)/100 * (chicang + 1)  # 平仓差额
-                    CIrate += round(CIrate * self.__leve * ((so - sc) / so - tax), 4)
+                    CIrate += round(CIrate * self.__lever * ((so - sc) / so - tax), 4)
 
                     ee.append(
                         [float(e), float(Dec(str(so)) - Dec(str(sc))), '空平', sc, ma[i - 1], o[i - 1], c[i - 1], h[i - 1], l[i - 1],
@@ -336,6 +336,7 @@ class Xag():
                         bo = (bo + ma[i] * 0.99) / 2
                         print(e, '多追', tskc, lateb)
                         chicang += 1'''
+
             if sign < -slope  and sell == 0 and si<-slope:  # or sct == 1:
                 lates += 1
                 lateb = 0
@@ -347,7 +348,7 @@ class Xag():
                     # if round(abs(o[i]-ma[i-1])/ma[i-1],4)>0.04:#
                     # bc=float(o[i])
                     e = ((Dec(str(e)) + Dec(str(bc)) - Dec(str(bo)))*100)/100 * (chicang + 1)
-                    CIrate += round(CIrate * self.__leve * ((bc - bo) / bo - tax), 4)
+                    CIrate += round(CIrate * self.__lever * ((bc - bo) / bo - tax), 4)
                     ee.append(
                         [float(e), float(Dec(str(bc)) - Dec(str(bo))), '多平', bc, ma[i - 1], o[i - 1], c[i - 1], h[i - 1], l[i - 1],
                          time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(ts[i - 1] / 1000)), i - 1, '', chicang,

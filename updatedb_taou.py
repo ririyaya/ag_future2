@@ -21,7 +21,7 @@ class CONNECTSQL(object):
         get_sq = 'select ts,t from ' + table_name + ' order by ts desc limit 1'
         self.updata_sq = 'insert into ' + table_name + ' (a,c,t,v,h,l,o,ts) values(%s,%s,%s,%s,%s,%s,%s,%s)'
         self.mydb = mysql.connector.connect(
-        host="localhost",
+            host="localhost",
             user="root",
             passwd="111",
             database='koudai',  # 数据库
