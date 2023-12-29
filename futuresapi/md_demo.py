@@ -11,7 +11,7 @@ import csv
 以下为需要订阅行情的合约号，注意选择有效合约；
 有效连上但没有行情可能是过期合约或者不再交易时间内导致
 '''
-subID=["ag2212"]
+subID=["ag2406"]
 
 class CFtdcMdSpi(mdapi.CThostFtdcMdSpi):
 

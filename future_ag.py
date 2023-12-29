@@ -12,15 +12,15 @@ xag   16,15,5
 '''
 
 
-con_sql = CONNECTSQL('ag30', 4, 114)
-#con_sql.updatedb(con_sql.mydb)
-# con_sql.updatetxt()
+# con_sql = CONNECTSQL('f_ag_15m', 4, 114)
+# #con_sql.updatedb(con_sql.mydb)
+# # con_sql.updatetxt()
 explain=[]
-if os.path.exists(r"d:\2.txt"):
-    os.remove(r"d:\2.txt")
-f = open(r"d:\2.txt", "a", encoding='utf-8')
+# if os.path.exists(r"d:\2.txt"):
+#     os.remove(r"d:\2.txt")
+# f = open(r"d:\2.txt", "a", encoding='utf-8')
 # m1=xagclass.MIN1(15)
-f_ag = trend.k_mod(3, 'ag15')  # 杠杆倍率,表,强制循环起点
+f_ag = trend.k_mod(3, 'f_ag_15m')  # 杠杆倍率,表,强制循环起点
 for ma_range in range(22,23):
     for slope in range(4, 5):
         for maxlate in range(9, 10):  # 斜率?

@@ -22,7 +22,7 @@ if os.path.exists(r"c:\2.txt"):
 # m1=xagclass.MIN1(15)
   # 杠杆倍率,表,强制循环起点
 
-for ma_range in range(13, 21):
+for ma_range in [13, 16, 20]:
     f_ag = trend.Xag(1, ma_range, 'xag1h', 2)
     for maxlate in range(25, 26):
         for slope in range(5, 6):  # 斜率?

@@ -12,6 +12,7 @@ import requests
 import csv
 import codecs
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt  # 重命名为plt
 
 def draw(fag,ma_range):
@@ -88,17 +89,15 @@ class GetXag(object):
             passwd="111",
             database='koudai',  # 数据库
             auth_plugin='mysql_native_password', unix_socket='/private/tmp/mysql.sock')  # 'caching_sha2_password')  #
-        d = mydb.cursor()
+        cursor = mydb.cursor()
         sq = 'select c,h,l,ts,o from ' + table + ' group by c,h,l,ts,o  order by ts'  # +' where ts>1635346800000'
-        d.execute(sq)
-        a = d.fetchall()
-        self.c1, self.h, self.l, self.ts, self.o = [], [], [], [], []
-        for i in range(0, len(a)):
-            self.c1.append(round(a[i][0], 5))
-            self.h.append(round(a[i][1], 5))
-            self.l.append(round(a[i][2], 5))
-            self.ts.append(a[i][3])
-            self.o.append(round(a[i][4], 5))
+        cursor.execute(sq)
+        result = cursor.fetchall()
+        # 获取列名
+        columns = [column[0] for column in cursor.description]
+        # 将结果转换为 Pandas DataFrame
+        df_orgin = pd.DataFrame(result, columns=columns)
+        self.c1, self.h, self.l, self.ts, self.o = df_orgin['c'].tolist(), df_orgin['h'].tolist(), df_orgin['l'].tolist(), df_orgin['ts'].tolist(),df_orgin['o'].tolist()
         self.start_i = start_i
         self.__leve = leve
 
