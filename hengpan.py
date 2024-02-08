@@ -54,7 +54,7 @@ class k_mod(object):
                 log.append(i)
         return log,ma
 '''
-f_ag = k_mod(2, 'ag30')  # 杠杆倍率,表,强制循环起点
+f_ag = Fag(2, 'ag30')  # 杠杆倍率,表,强制循环起点
 for ma_range in range(20,21):
     for slope in [2]:
         fag,ma= f_ag.ot(slope, ma_range,  f_ag.o, f_ag.h, f_ag.l, f_ag.ts, f_ag.c1)
